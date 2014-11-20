@@ -18,8 +18,7 @@
   :components ((:module "src"
                 :components
                 ((:file :package)
-                 (:file :eazy-project)
-                 (:file :processors))
+                 (:file :specials))
                 :serial t))
   :description "Generate and Manage a Project"
   :in-order-to ((test-op (load-op eazy-project-test))))
