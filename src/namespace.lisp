@@ -16,7 +16,8 @@ debugging purpose. I assume there won't be so many additional namespaces.
 
 (defpackage :lisp-n
   (:use :cl :alexandria)
-  (:export :define-namespace))
+  (:export :define-namespace
+           :clear-namespace))
 
 (in-package :lisp-n)
 
@@ -47,7 +48,7 @@ debugging purpose. I assume there won't be so many additional namespaces.
         (hash (symbolicate "*" name "-TABLE*")))
     `(progn
        (defvar ,hash (make-hash-table :test 'eq))
-       (declaim (ftype (function (symbol &optional ,expected-type) ,expected-type) ,accessor))
+       (declaim (ftype (function (symbol &optional (or null ,expected-type)) ,expected-type) ,accessor))
        (defun ,accessor (symbol &optional (default nil default-provided-p))
          (if default-provided-p
              (gethash symbol ,hash default)
@@ -61,9 +62,16 @@ debugging purpose. I assume there won't be so many additional namespaces.
        ,@(when (speed-requird)
                `((declare (inline ,accessor))
                  (declare (inline (setf ,accessor)))))
-       (push ',name *namespaces*))))
+       (pushnew ',name *namespaces*))))
 
 ;; (define-namespace menu function)
 
+(defun clear-namespace (name &optional check-error)
+  (when check-error
+    (assert (member name *namespaces*)))
+  (removef *namespaces* name)
+  (setf (symbol-value (symbolicate "*" name "-TABLE*"))
+        (make-hash-table :test 'eq))
+  name)
 
 ;; TODO namespace-let

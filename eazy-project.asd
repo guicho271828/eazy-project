@@ -20,7 +20,11 @@
                 :components
                 ((:file :namespace)
                  (:file :package)
-                 (:file :specials))
+                 (:file :specials)
+                 (:file :defmenu)
+                 (:file :ask)
+                 (:file :with-menus-in)
+                 (:file :loop))
                 :serial t))
   :description "Generate and Manage a Project"
   :in-order-to ((test-op (load-op eazy-project-test))))

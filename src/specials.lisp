@@ -33,5 +33,12 @@
                      (list (shell-command "git config --global --get user.email")
                            (shell-command "echo $(whoami)@$(hostname)")))))
 
+@export
+(defvar *local-repo*
+  (or
+   (ignore-errors 
+     (first (eval (read-from-string "ql:*local-project-directories*"))))
+   *default-pathname-defaults*))
+
 
 
