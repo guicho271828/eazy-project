@@ -18,44 +18,44 @@
 
 (test defmenu
   ;; forward-reference
-  
-  (defmenu (test-submenu2 :in test-main :title "submenu2")
-    (format t "Entering the submenu2"))
+  (finishes
+    (defmenu (test-submenu2 :in test-main :message "submenu2")
+      (format t "Entering the submenu2")))
 
-  (defmenu (unrelated :title "Enter the main menu")
-    (format t "Entering the main menu"))
+  (finishes
+    (defmenu (unrelated :message "Enter the main menu")
+      (format t "Entering the main menu")))
 
-  (defmenu (test-main :title "Enter the main menu")
-    (format t "Entering the main menu"))
+  (finishes
+    (defmenu (test-main :message "Enter the main menu")
+      (ask "Select submenu")))
 
-  (defmenu (test-submenu :in test-main :title "submenu")
-    (format t "Entering the submenu")))
+  (finishes
+    (defmenu (test-submenu :in test-main :message "submenu")
+      (format t "Entering the submenu")))
 
-(test (with-menus-in :depends-on defmenu)
+  (finishes
+    (print
+     (eazy-project::generate-restart-hander-forms
+      'test-main)))
+
   (signals ask
     (ask "select a submenu"))
   (signals ask
-    (with-menus-in (test-main)
-      (ask "select a submenu")))
-  (is-true
-   (block nil
-     (handler-bind ((ask (lambda (c)
-                           (signals error
-                             (invoke-restart 'test-main))
-                           (finishes
-                             (invoke-restart 'test-submenu))
-                           (finishes
-                             (invoke-restart 'test-submenu))
-                           (return t))))
-       (with-menus-in (test-main)
-         (ask "select a submenu"))))))
+    (eazy-project::invoke-menu
+     (eazy-project::symbol-menu 'test-main)))
 
-(test (main-loop :depends-on with-menus-in)
-  
+  (is-true
+   (block out
+     (handler-bind ((ask (lambda (c)
+                           (finishes
+                             (invoke-restart
+                              (find-restart 'test-submenu c)))
+                           (return-from out t))))
+       (invoke-menu 'test-main))))
+
   (signals ask (launch-menu))
   (is-true
-   (handler-bind ((ask (lambda (c)
-                         (invoke-restart
-                          (find-restart :quit-session c)))))
+   (handler-bind ((ask (lambda (c) (up t))))
      (launch-menu))))
 

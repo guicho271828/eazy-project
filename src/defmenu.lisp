@@ -14,18 +14,18 @@
   (parent (error "parent not specified")
           :type symbol
           :read-only t)
-  (title ""
+  (message ""
          :type (or string function)
          :read-only t)
   (body (error "body not specified")
-        :type function
+        :type list
         :read-only t))
 
 (define-namespace menu t)
 
 @export
 (defmacro defmenu ((name &key
-                         (title (string-capitalize name))
+                         (message (string-capitalize name))
                          (in name parent-provided-p)) &body body)
   (assert (symbolp name))
   `(progn
@@ -34,13 +34,53 @@
        (warn "Redefining menu: ~a" ',name)
        (let ((old-parent (menu-parent old)))
          (removef (gethash old-parent *parent-children-db*) ',name)))
-     (defun ,name () ,@body)
+     (defun ,name () (invoke-menu (symbol-menu ',name)))
      (let* ((menuobj
              (make-menu :name ',name
                         :parent ',in
-                        :title ,title
-                        :body (function ,name))))
+                        :message ,message
+                        :body ',body)))
        (setf (symbol-menu ',name) menuobj)
        ,(when parent-provided-p
               `(pushnew ',name (gethash ',in *parent-children-db*)))
        ',name)))
+
+@export
+(defun invoke-menu (menu)
+  (funcall (menu-task (etypecase menu
+                        (symbol (symbol-menu menu))
+                        (menu menu)))))
+
+(defun menu-task (menu)
+  (compile nil `(lambda () ,(menu-task-form menu))))
+
+(defvar *current-menu*)
+(defun menu-task-form (menu)
+  `(restart-bind (,@(generate-restart-hander-forms
+                     (menu-name menu)))
+     (restart-case
+         (let ((*current-menu* ',(menu-name menu)))
+           ,@(menu-body menu))
+       (up (value) :report "Quit this section."
+           value))))
+
+@export
+(defun up (&optional value)
+  (invoke-restart (find-restart 'up) value))
+
+(defun generate-restart-hander-forms (name)
+  (iter (for child in (menu-children (symbol-menu name)))
+        (collect
+            (ematch (symbol-menu child)
+              ((menu- name parent (message (and message (type string))))
+               `(,name (function ,name)
+                       :test-function (lambda (c)
+                                        (and (typep c 'ask)
+                                             (eq *current-menu* ',parent)))
+                       :report-function (lambda (s) (princ ,message s))))
+              ((menu- name parent (message (and message (type function))))
+               `(,name (function ,name)
+                       :test-function (lambda (c)
+                                        (and (typep c 'ask)
+                                             (eq *current-menu* ',parent)))
+                       :report-function ,message))))))

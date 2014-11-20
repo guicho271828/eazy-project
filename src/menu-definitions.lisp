@@ -7,28 +7,50 @@
 ;; main menu
 
 (defmenu (ep-main)
-  )
+  (iter (ask "What to do next?")))
 
+(defmacro qif ((var) then &optional (else '(q "~%Cancelled.~%")))
+  `(let ((,var (read-line *query-io*)))
+     (if (plusp (length ,var))
+         ,then
+         ,else)))
+(defun q (format-control &rest format-arguments)
+  (terpri *query-io*)
+  (apply #'format *query-io* format-control
+         format-arguments))
 
-(defmenu (set-local-repo :in ep-main)
-  (format *query-io*
-          "~&Enter the directory where a new project is created.~% Current:~A~% empty line: cancel"
-          *local-repo*)
-  (let ((read (read-line *query-io*)))
-    (if (plusp (length read))
-        (setf *local-repo* (pathname read))
-        (format *query-io* "~&Cancelled."))))
+;; submenus
 
-(defmenu (initialize-repo :in ep-main)
-  )
-(defmenu (initialize-local-repo :in ep-main)
-  )
+(defmenu (set-local-repo
+          :in ep-main
+          :message
+          "Enter the default directory where a new project is created.")
+  (q "Enter the default directory where a new project is created.
+      Current: ~A
+      Empty Line: cancel~%" *local-repo*)
+  (qif (str)
+       (setf *local-repo* (pathname str))))
+
+(defvar *options*)
+(defmenu (create-project :in ep-main
+                         :message "Create a new project.")
+  (let ((*options* nil))
+    (ask "Select and enter the information, then select 'CREATE'.")))
+
+(defmenu (set-name :in create-project)
+  (q "Enter the name. Current: ~A
+      Empty Line: cancel~%"
+     (getf *options* :name ""))
+  (qif (str)
+       (setf (getf *options* :name) str))
+  (up))
+
 (defmenu (initialize-local-repo :in ep-main)
   )
 
 
 
 (defmenu (initialize-git :in post-init
-                         :title "Initialize git")
+                         :message "Initialize git")
   (shell-command "git init")
   (shell-command "git add *"))

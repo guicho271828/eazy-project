@@ -9,16 +9,15 @@
 
 ;; note that ep-menu should be defined before compiling this file
 
+
+
 @export
 (defun launch-menu ()
   "launch the menu."
   (restart-case
-      (iter
-        (with-menus-in (ep-menu)
-          (ask "What to do next?")))
-    (:quit-session ()
-      :report "Quit session."
+      (invoke-menu 'ep-main)
+    (:reload-menu ()
+      :report "Reload the menu (for development)"
       :test (lambda (c) (typep c 'ask))
       t)))
-
 

@@ -4,24 +4,21 @@
 (cl-syntax:use-syntax :annot)
 
 @export
-(defmacro with-menus-in ((name) &body body)
-  (assert (symbolp name))
-  `(restart-bind ,(generate-restart-hander-forms name)
-     ,@body))
+(defmacro with-menus-in ((main-menu-name) &body body)
+  (assert (symbolp main-menu-name))
+  ;(register-main-menu main-menu-name)
+  `(progn
+     (defmenu (,main-menu-name) ,@body)
+     (,main-menu-name)))
+
+;; ;; test
 
 
-(defun generate-restart-hander-forms (name)
-  (iter (for child in
-             (handler-case
-                 (menu-children (symbol-menu name))
-               (error (c)
-                 (declare (ignore c))
-                 (format t "symbol ~a is not yet initialized to have a menu, ignoring." name))))
-        (collect
-            (ematch (symbol-menu child)
-              ((menu- name (title (and title (type string))) body)
-               `(,name ,body
-                       :report-function (lambda (s) (princ ,title s))))
-              ((menu- name (title (and title (type function))) body)
-               `(,name ,body :report-function ,title))))))
-
+;; (defparameter *thing* :a)
+;; (defmacro expand () `(progn ,*thing*))
+;; (defun test1 ()
+;;   (expand))
+;; (print (eq :a (test1)))
+;; (defparameter *thing* :b)
+;; (compile 'test1 (function-lambda-expression #'test1))
+;; (print (eq :a (test1)))
