@@ -1,0 +1,28 @@
+* EAZY-Project - Interactive Project Generator & Manager
+
+This is basically a fork from cl-project@fukamachi, but I'm gonna go much further...
+
+Usage:
+#+BEGIN_SRC 
+(eazy-project:create)
+#+END_SRC
+
+* Basic features
+
+The main contributions in cl-project@fukamachi compared to the other
+project-generation libraries were:
+
++ Templating based on CL-EMB 
++ Unit testing as default
+
+Additional changes includes:
+
++ interactive project generation
++ interactive dependency management
++ unit-testing library can be customizable
++ automatic initialization with a version control system (currently git)
+
+To load this library, clone the repo into the quicklisp's local-project
+directory and run
+=(ql:register-local-project)(ql:quickload :eazy-project)=.
+
