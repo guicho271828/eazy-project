@@ -29,28 +29,55 @@
       Current: ~A
       Empty Line: cancel~%" *local-repo*)
   (qif (str)
-       (setf *local-repo* (pathname str))))
+       (setf *local-repo* str))
+  (up))
 
 (defvar *options*)
 (defmenu (create-project :in ep-main
                          :message "Create a new project.")
-  (let ((*options* nil))
-    (ask "Select and enter the information, then select 'CREATE'.")))
+  (let ((*options* *default-options*))
+    (ask "Select and enter the information, then select 'CREATE'.
+Current configuration:
+~{~20@<~a~> = ~a~%~}" *options*)))
 
-(defmenu (set-name :in create-project)
-  (q "Enter the name. Current: ~A
+(macrolet ((set-x (what)
+             `(defmenu (,(symbolicate 'set- what) :in create-project)
+                (q "Enter the ~a of the project. Current: ~A ~
+                    Empty Line: cancel~%"
+                   ,what
+                   (getf *options* ,what ""))
+                (qif (str) (setf (getf *options* ,what) str))
+                (up))))
+  (set-x :name)
+  (set-x :author)
+  (set-x :email))
+
+(defmenu (add-dependency :in create-project)
+  (q "Enter a name. Case is uppercaase-converted.
+      Example:   oSiCaT   -->  finally appears as :OSICAT
       Empty Line: cancel~%"
      (getf *options* :name ""))
   (qif (str)
-       (setf (getf *options* :name) str))
+       (pushnew (intern str (find-package "KEYWORD"))
+                (getf *options* :dependency)))
   (up))
 
-(defmenu (initialize-local-repo :in ep-main)
-  )
+
+(defmenu (select-test-library :in create-project)
+  (ask "Select the library from below.
+        If you are ok with the current one, then go back.
+        Current: ~a" (getf *options* :test)))
+
+(macrolet ((testlib (what)
+             `(defmenu (,what :in select-test-library)
+                (setf (getf *options* :test) ,what)
+                (up))))
+  (testlib :cl-test-more)
+  (testlib :5am)
+  (testlib :eos))
+
+(defmenu (git :in create-project :message "Initialize git")
+  (q "Enabling git...")
+  (setf (getf *options* :git) t))
 
 
-
-(defmenu (initialize-git :in post-init
-                         :message "Initialize git")
-  (shell-command "git init")
-  (shell-command "git add *"))

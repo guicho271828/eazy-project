@@ -61,7 +61,7 @@
      (restart-case
          (let ((*current-menu* ',(menu-name menu)))
            ,@(menu-body menu))
-       (up (value) :report "Quit this section."
+       (up (&optional value) :report "Quit this section."
            value))))
 
 @export
