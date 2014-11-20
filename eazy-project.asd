@@ -18,7 +18,8 @@
                :local-time)
   :components ((:module "src"
                 :components
-                ((:file :package)
+                ((:file :namespace)
+                 (:file :package)
                  (:file :specials))
                 :serial t))
   :description "Generate and Manage a Project"
