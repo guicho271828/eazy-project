@@ -2,8 +2,9 @@
 (defpackage eazy-project
   (:use :cl
         :alexandria
-        :cl-fad
+        :osicat
         :trivial-shell
         :cl-ppcre
-        :cl-emb))
+        :cl-emb
+        :optima))
 
