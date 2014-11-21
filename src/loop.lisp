@@ -14,5 +14,14 @@
 @export
 (defun launch-menu ()
   "launch the menu."
-  (invoke-menu 'ep-main))
+  (restart-case
+      (invoke-menu 'ep-main)
+    (:quit-session ()
+      :report "Quit this session."
+      )))
+
+
+@export
+(defun quit-session ()
+  (invoke-restart (find-restart :quit-session)))
 

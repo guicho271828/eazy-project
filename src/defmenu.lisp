@@ -69,30 +69,19 @@
               (let ((*current-menu* ',name))
                 ,@(menu-body menu)))
           (:up ()
-            :report ,(format nil "Quit the section ~a." name)
-            :test (lambda (c)
-                    (declare (ignore c))
-                    (and ;; (askp c)
-                     (eq *current-menu* ',name)))
-            t)
-          (:reload-menu ()
-            :report ,(format nil "Reload the menu ~a." name)
+            :report ,(format nil "Back to the section ~a." name)
             :test (lambda (c)
                     (declare (ignore c))
                     (and ;; (askp c)
                      (eq (menu-parent
-                          (symbol-menu *current-menu*))
-                         ',name)))
+                              (symbol-menu *current-menu*))
+                             ',name)))
             (go :start))))))
 
 @export
 (defun up ()
+  "go up the menu"
   (invoke-restart (find-restart :up)))
-
-@export
-(defun reload ()
-  (invoke-restart (find-restart :reload-menu)))
-
 
 (defun generate-restart-hander-forms (name)
   (iter (for child in (menu-children (symbol-menu name)))

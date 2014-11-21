@@ -56,6 +56,6 @@
 
   (signals ask (launch-menu))
   (finishes
-   (handler-bind ((ask (lambda (c) (up))))
+   (handler-bind ((ask (lambda (c) (quit-session))))
      (launch-menu))))
 

@@ -9,9 +9,12 @@
 ;;; main menu
 
 (defmenu (ep-main)
-  (iter (ask "What to do next?~2%Here are current default configs:
+  (format t "~@[Resetting the current project config~%~]"
+          *project-config*)
+  (setf *project-config* nil)
+  (ask "What to do next?~2%Here are current default configs:
 ~{~20@<~s~> = ~s~%~}"
-             *config*)))
+       *config*))
 
 ;;; utilities
 
@@ -72,7 +75,7 @@ Current configuration:
                 (print-config-update-direction ,what)
                 (qif (str)
                      (update-config-item ,what str))
-                (reload))))
+                (up))))
   (set-x :local-repository
          "Enter the location for a new project subdirectory.")
   (set-x :test
@@ -83,7 +86,8 @@ Current configuration:
 (defmenu (git :in set-global :message "Toggle git initialization")
   (q "~:[En~;Dis~]abling git..." (getf *config* :git))
   (setf (getf *config* :git)
-        (not (getf *config* :git))))
+        (not (getf *config* :git)))
+  (up))
 
 (defmenu (add-dependency :in set-global)
   (q "Enter a name of a library. The input string is converted to a keyword.
@@ -96,7 +100,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
          (list (intern (string-upcase str)
                        (find-package "KEYWORD")))
          (getf *config* :depends-on))))
-  (reload))
+  (up))
 
 ;;;; project-local information
 
@@ -110,14 +114,14 @@ Current local configuration:
        *config* *project-config* *project-config*))
 
 (macrolet ((set-x (what &optional control)
-             `(defmenu (,what :in set-global)
+             `(defmenu (,what :in create-project)
                 ,(if control
                      `(q ,control)
                      `(q "Enter the ~a information." ,what))
                 (print-config-update-direction ,what t)
                 (qif (str)
                      (update-config-item ,what str t))
-                (reload))))
+                (up))))
   (set-x :name
          "Enter the new project name, this affects the name of the
 subfolder, asdf system name and the package name."))
@@ -134,7 +138,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
                        (find-package "KEYWORD")))
          (getf *project-config* :depends-on))
         t))
-  (reload))
+  (up))
 
 (defmenu (reset-local-config
           :in create-project
@@ -147,9 +151,9 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
         (intern (string-upcase str)
                 (find-package "KEYWORD"))
         nil t))
-  (reload))
+  (up))
 
 (defmenu (create :in create-project)
   (actually-create-project)
-  (reload))
+  (up))
 
