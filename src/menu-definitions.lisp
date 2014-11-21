@@ -78,8 +78,6 @@ Current configuration:
                 (up))))
   (set-x :local-repository
          "Enter the location for a new project subdirectory.")
-  (set-x :test
-         "Enter a name of the test library you'd like to use.")
   (set-x :author)
   (set-x :email))
 
@@ -89,6 +87,9 @@ Current configuration:
         (not (getf *config* :git)))
   (up))
 
+
+  (set-x :test
+         )
 (defmenu (add-dependency :in set-global)
   (q "Enter a name of a library. The input string is converted to a keyword.
 Example:   oSiCaT   -->  finally appears as :OSICAT")
@@ -100,6 +101,17 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
          (list (intern (string-upcase str)
                        (find-package "KEYWORD")))
          (getf *config* :depends-on))))
+  (up))
+
+(defmenu (test :in set-global)
+  (q "Enter a name of the test library you'd like to use.
+The input string is converted to a keyword.
+  Example:   oSiCaT   -->  finally appears as :OSICAT")
+  (print-config-update-direction :depends-on)
+  (qif (str)
+       (update-config-item
+        :test (intern (string-upcase str)
+                      (find-package "KEYWORD"))))
   (up))
 
 ;;;; project-local information

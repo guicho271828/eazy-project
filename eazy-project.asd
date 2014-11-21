@@ -23,10 +23,10 @@
                  (:file :specials)
                  (:file :defmenu)
                  (:file :ask)
-                 (:file :with-menus-in)
                  (:file :loop)
                  (:file :menu-definitions)
-                 (:file :create-project))
+                 (:file :create-project)
+                 (:file :autoload))
                 :serial t))
   :description "Generate and Manage a Project"
   :in-order-to ((test-op (load-op eazy-project-test))))
