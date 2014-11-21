@@ -136,13 +136,6 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
         t))
   (reload))
 
-
-(defmenu (reset-all-local-config
-          :in create-project
-          :message "Reset the current local config")
-  (setf *project-config* nil)
-  (reload))
-
 (defmenu (reset-local-config
           :in create-project
           :message "Reset the current local config")
@@ -158,5 +151,5 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 
 (defmenu (create :in create-project)
   (actually-create-project)
-  (up))
+  (reload))
 
