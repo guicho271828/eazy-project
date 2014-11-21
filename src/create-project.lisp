@@ -22,15 +22,25 @@ Actual Parameters:
       (walk-directory 
        (getf *project-config* :skeleton-directory)
        #'process-file
-       :test (lambda (path)
-               (declare (ignore path))
-               (not (string=
-                     "includes"
-                     (pathname-name
-                      (pathname-as-file 
-                       (pathname-directory-pathname
-                        *default-pathname-defaults*))))))))))
+       :test #'not-includefile-p))
 
+    ;; misc
+
+    (when (getf *project-config* :git)
+      (let ((*default-pathname-defaults*
+             (merge-pathnames
+              (getf *project-config* :name)
+              (getf *project-config* :local-repository))))
+        (princ (shell-command "git init; git add *"))))))
+
+(defun not-includefile-p (path)
+  (declare (ignore path))
+  (not (string=
+        "includes"
+        (pathname-name
+         (pathname-as-file 
+          (pathname-directory-pathname
+           *default-pathname-defaults*))))))
 
 (defun process-file (file)
   (let* ((tpl-path (merge-pathnames file))

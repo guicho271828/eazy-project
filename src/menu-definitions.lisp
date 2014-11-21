@@ -87,9 +87,6 @@ Current configuration:
         (not (getf *config* :git)))
   (up))
 
-
-  (set-x :test
-         )
 (defmenu (add-dependency :in set-global)
   (q "Enter a name of a library. The input string is converted to a keyword.
 Example:   oSiCaT   -->  finally appears as :OSICAT")
