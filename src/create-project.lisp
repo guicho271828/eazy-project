@@ -128,7 +128,11 @@ Actual Parameters:
 
 ;; required field
 (defprocessor (:name g l)
-  (assert l nil "the project name is not provided!"))
+  (handler-case
+      (assert l nil "the project name is not provided!")
+    (error (c)
+      (declare (ignore c))
+      (:name))))
 
 ;; appended to global settings
 (defprocessor (:depends-on g l) (setf l (union l g)))
