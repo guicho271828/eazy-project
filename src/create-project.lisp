@@ -31,7 +31,9 @@ Actual Parameters:
              (merge-pathnames
               (getf *project-config* :name)
               (getf *project-config* :local-repository))))
-        (princ (shell-command "git init; git add *"))))))
+        (princ (shell-command
+                (format nil "cd ~a; git init; git add *"
+                        *default-pathname-defaults*)))))))
 
 (defun not-includefile-p (path)
   (declare (ignore path))
