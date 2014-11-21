@@ -14,10 +14,5 @@
 @export
 (defun launch-menu ()
   "launch the menu."
-  (restart-case
-      (invoke-menu 'ep-main)
-    (:reload-menu ()
-      :report "Reload the menu (for development)"
-      :test (lambda (c) (typep c 'ask))
-      t)))
+  (invoke-menu 'ep-main))
 

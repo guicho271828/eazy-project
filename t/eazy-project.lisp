@@ -55,7 +55,7 @@
        (invoke-menu 'test-main))))
 
   (signals ask (launch-menu))
-  (is-true
-   (handler-bind ((ask (lambda (c) (up t))))
+  (finishes
+   (handler-bind ((ask (lambda (c) (up))))
      (launch-menu))))
 

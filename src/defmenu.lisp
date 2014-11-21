@@ -49,24 +49,50 @@
 (defun invoke-menu (menu)
   (funcall (menu-task (etypecase menu
                         (symbol (symbol-menu menu))
-                        (menu menu)))))
+                        (menu menu))))
+  ;; (when-let ((r (find-restart 'up)))
+  ;;   (invoke-restart r))
+  )
 
 (defun menu-task (menu)
   (compile nil `(lambda () ,(menu-task-form menu))))
 
-(defvar *current-menu*)
+(defvar *current-menu* nil)
 (defun menu-task-form (menu)
-  `(restart-bind (,@(generate-restart-hander-forms
-                     (menu-name menu)))
-     (restart-case
-         (let ((*current-menu* ',(menu-name menu)))
-           ,@(menu-body menu))
-       (up (&optional value) :report "Quit this section."
-           value))))
+  (let ((name (menu-name menu)))
+    `(tagbody
+      :start
+        (restart-case
+            (restart-bind (,@(generate-restart-hander-forms
+                              name))
+              
+              (let ((*current-menu* ',name))
+                ,@(menu-body menu)))
+          (:up ()
+            :report ,(format nil "Quit the section ~a." name)
+            :test (lambda (c)
+                    (declare (ignore c))
+                    (and ;; (askp c)
+                     (eq *current-menu* ',name)))
+            t)
+          (:reload-menu ()
+            :report ,(format nil "Reload the menu ~a." name)
+            :test (lambda (c)
+                    (declare (ignore c))
+                    (and ;; (askp c)
+                     (eq (menu-parent
+                          (symbol-menu *current-menu*))
+                         ',name)))
+            (go :start))))))
 
 @export
-(defun up (&optional value)
-  (invoke-restart (find-restart 'up) value))
+(defun up ()
+  (invoke-restart (find-restart :up)))
+
+@export
+(defun reload ()
+  (invoke-restart (find-restart :reload-menu)))
+
 
 (defun generate-restart-hander-forms (name)
   (iter (for child in (menu-children (symbol-menu name)))
@@ -74,13 +100,19 @@
             (ematch (symbol-menu child)
               ((menu- name parent (message (and message (type string))))
                `(,name (function ,name)
-                       :test-function (lambda (c)
-                                        (and (typep c 'ask)
-                                             (eq *current-menu* ',parent)))
-                       :report-function (lambda (s) (princ ,message s))))
+                       :test-function
+                       (lambda (c)
+                         (and (askp c)
+                              (eq *current-menu* ',parent)))
+                       :report-function
+                       (lambda (s)
+                         (princ ,message s))))
               ((menu- name parent (message (and message (type function))))
                `(,name (function ,name)
-                       :test-function (lambda (c)
-                                        (and (typep c 'ask)
-                                             (eq *current-menu* ',parent)))
-                       :report-function ,message))))))
+                       :test-function
+                       (lambda (c)
+                         (and (askp c)
+                              (eq *current-menu* ',parent)))
+                       :report-function
+                       (lambda (s)
+                         (funcall ,message s))))))))
