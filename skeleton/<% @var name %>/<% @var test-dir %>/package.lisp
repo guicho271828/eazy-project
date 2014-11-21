@@ -7,11 +7,14 @@
 (defpackage :<% @var test-name %>
   (:use :cl
         :<% @var name %>
-        :<% @var test-suite %>))
+        :<% @var test %>))
 (in-package :<% @var test-name %>)
 
 <%= (cl-emb:execute-emb
-     (merge-pathnames (getf env :test-template) template-path-default)
-      :env env :generator-maker generator-maker)
+     (merge-pathnames
+      (getf env :test-template)
+      (merge-pathnames "includes/"))
+      :env env)
 %>
+
 

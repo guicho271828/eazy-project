@@ -5,7 +5,7 @@
 (defvar *skeleton-directory*
   #.(asdf:system-relative-pathname
      :eazy-project
-     #p"skeletons/default"))
+     #p"skeleton"))
 
 (defun ok (str)
   (plusp (length str)))
@@ -47,9 +47,14 @@
                  :author *author*
                  :email *email*
                  :git t
+                 :readme-extension "md"
+                 :source-dir "src"
+                 :test-dir "t"
+                 :test-subname "test"
+                 :delimiter "."
+                 :license "LLGPL"
                  :test :fiveam
-                 :depends-on '(:alexandria :optima
-                               :iterate))
+                 :depends-on '(:alexandria :optima :iterate))
            s)))
 
 @export

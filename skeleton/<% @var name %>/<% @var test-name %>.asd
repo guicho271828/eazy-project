@@ -14,8 +14,8 @@
   :author "<% @var author %>"
   :license "<% @var license %>"
   :depends-on (:<% @var name %>
-               :<% @var test-suite %>)
+               :<% @var test %>)
   :components ((:module "<% @var test-dir %>"
                 :components
-                ((:file "<% @var package-name %>"))))
+                ((:file "package"))))
   :perform (load-op :after (op c) <% @var test-command %>))

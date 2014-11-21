@@ -1,0 +1,7 @@
+
+<%= (cl-emb:execute-emb
+     (merge-pathnames
+      (getf env :readme-filename)
+      (merge-pathnames "includes/"))
+      :env env)
+%>

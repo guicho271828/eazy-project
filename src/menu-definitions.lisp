@@ -155,5 +155,5 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 
 (defmenu (create :in create-project)
   (actually-create-project)
-  (up))
+  (quit-session))
 
