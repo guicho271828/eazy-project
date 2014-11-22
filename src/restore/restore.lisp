@@ -29,12 +29,14 @@
                       (g :session.systems)
                       :test #'string=))
       (progn
-        (format t "~& [Session Unchanged! Doubling the watch time...]~%")
+        (format t "~& [Session Unchanged! Doubling the watch interval to avoid clutter (max ~a)]~%"
+                (g :session.watch.max))
         nil)
       (progn
         (update-config-item :session.package (package-name *package*))
         (update-config-item :session.systems (asdf:already-loaded-systems))
-        (format t "~& [Session Saved!]")
+        (format t "~& [Session Saved! Resetting the watch interval to ~a]~%"
+                (g :session.watch.min))
         t)))
 
 (defmenu (add-default-system :in session)
