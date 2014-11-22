@@ -14,7 +14,8 @@
                :cl-emb
                :osicat
                :cl-syntax
-               :cl-syntax-annot)
+               :cl-syntax-annot
+               :local-time)
   :components ((:module "src"
                 :components
                 ((:file :namespace)
