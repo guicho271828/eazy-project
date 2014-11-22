@@ -21,7 +21,8 @@
 (defmacro qif ((var) then &optional (else '(q "~%Cancelled.~%")))
   "Read a line from *query-io*, bind it to var, then if it is non-empty string run `then'.
 else, run `else'."
-  `(let ((,var (read-line *query-io*)))
+  `(let ((,var (or (pop *menu-arguments*) ;; when called programatically
+                   (read-line *query-io*))))
      (if (plusp (length ,var))
          ,then
          ,else)))

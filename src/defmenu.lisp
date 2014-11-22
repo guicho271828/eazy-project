@@ -24,6 +24,11 @@
 (define-namespace menu t)
 
 @export
+(defvar *menu-arguments* nil
+  "Holds the arguments to the restarts, when the menu is launched
+  programatically. These arguments are considered by `qif'.")
+
+@export
 (defmacro defmenu ((name &key
                          (message (string-capitalize name))
                          (in name parent-provided-p)) &body body)
@@ -34,7 +39,8 @@
        (warn "Redefining menu: ~a" ',name)
        (let ((old-parent (menu-parent old)))
          (removef (gethash old-parent *parent-children-db*) ',name)))
-     (defun ,name () (invoke-menu (symbol-menu ',name)))
+     (defun ,name (&rest *menu-arguments*)
+       (invoke-menu (symbol-menu ',name)))
      (let* ((menuobj
              (make-menu :name ',name
                         :parent ',in
@@ -57,6 +63,7 @@
 (defun menu-task (menu)
   (compile nil `(lambda () ,(menu-task-form menu))))
 
+@export
 (defvar *current-menu* nil)
 (defun menu-task-form (menu)
   (let ((name (menu-name menu)))
