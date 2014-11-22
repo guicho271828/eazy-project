@@ -5,7 +5,7 @@
   :version "0.1"
   :author "Masataro Asai"
   :license "LLGPL"
-  :depends-on (:eazy-project
+  :depends-on (:eazy-project.impl
                :bordeaux-threads)
   :components ((:module "src"
                 :components
