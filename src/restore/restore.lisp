@@ -54,7 +54,6 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 (defmenu (toggle-watch
           :in session
           :message "Watch and automatically save the session")
-  (asdf:load-system :eazy-project.watch)
   (toggle-global :session.watch)
   (update-config-item :session.watch.min
                       (or (g :session.watch.min) 30))
@@ -65,6 +64,6 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 
 (defun try-initiate-watch ()
   (when (g :session.watch)
+    (asdf:load-system :eazy-project.watch)
     (enable-watch)))
 
-(try-initiate-watch)
