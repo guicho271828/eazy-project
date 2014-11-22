@@ -26,6 +26,7 @@
                  (:file :loop)
                  (:file :menu-definitions)
                  (:file :create-project)
+                 (:file :actually-create-project)
                  (:file :autoload))
                 :serial t))
   :description "Generate and Manage a Project"
