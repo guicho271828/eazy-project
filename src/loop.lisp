@@ -16,12 +16,12 @@
   "launch the menu."
   (restart-case
       (invoke-menu 'ep-main)
-    (:quit-session ()
-      :report "Quit this session."
+    (:quit-menu ()
+      :report "Quit this eazy-project menu."
       )))
 
 
 @export
-(defun quit-session ()
-  (invoke-restart (find-restart :quit-session)))
+(defun quit-menu ()
+  (invoke-restart (find-restart :quit-menu)))
 

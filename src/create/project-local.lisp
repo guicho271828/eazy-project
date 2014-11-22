@@ -34,7 +34,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
         (union
          (list (intern (string-upcase str)
                        (find-package "KEYWORD")))
-         (getf *project-config* :depends-on))
+         (l :depends-on))
         t))
   (up))
 
@@ -53,5 +53,5 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 
 (defmenu (create :in create-project)
   (actually-create-project)
-  (quit-session))
+  (quit-menu))
 

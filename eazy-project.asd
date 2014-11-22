@@ -9,13 +9,12 @@
   :author "Masataro Asai"
   :license "LLGPL"
   :depends-on (:trivial-shell
+               :asdf
                :optima
                :cl-emb
                :osicat
-               :cl-ppcre
                :cl-syntax
-               :cl-syntax-annot
-               :local-time)
+               :cl-syntax-annot)
   :components ((:module "src"
                 :components
                 ((:file :namespace)

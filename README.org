@@ -17,6 +17,124 @@ eazy-project:!
 
 And follow the instruction that appears in the debugger.
 
+** Generate a project
+
+First, open the debugger menu with =!=.
+
+#+BEGIN_SRC 
+(You are now in menu EP-MAIN.)
+What to do next?
+
+Here are current default configs:
+:SESSION.SYSTEMS     = (...
+                        "fare-quasiquote")
+:SESSION.PACKAGE     = "COMMON-LISP-USER"
+:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
+:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
+:AUTHOR              = "Masataro Asai"
+:EMAIL               = "guicho2.71828@gmail.com"
+:GIT                 = T
+:README-EXTENSION    = "md"
+:SOURCE-DIR          = "src"
+:TEST-DIR            = "t"
+:TEST-SUBNAME        = "test"
+:DELIMITER           = "."
+:LICENSE             = "LLGPL"
+:TEST                = :FIVEAM
+:DEPENDS-ON          = (:ALEXANDRIA :OPTIMA :ITERATE)
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [SESSION] Save/Restore the currently loaded libraries
+ 1: [CREATE-PROJECT] Create a new project.
+ 2: [SET-GLOBAL] Modify these default values
+ 3: [UP] Back to the section EP-MAIN.
+ 4: [QUIT-SESSION] Quit this session.
+ 5: [RETRY] Retry SLIME REPL evaluation request.
+#+END_SRC
+
+Select =create-project=. A new debugger menu appears,
+so select =name= to enter the name of the new project.
+You can further add the dependencies.
+
+#+BEGIN_SRC 
+(You are now in menu CREATE-PROJECT.)
+Select and enter the information, then select 'CREATE'.
+Current global configuration:
+:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
+:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
+:AUTHOR              = "Masataro Asai"
+:EMAIL               = "guicho2.71828@gmail.com"
+:GIT                 = T
+:README-EXTENSION    = "md"
+:SOURCE-DIR          = "src"
+:TEST-DIR            = "t"
+:TEST-SUBNAME        = "test"
+:DELIMITER           = "."
+:LICENSE             = "LLGPL"
+:TEST                = :FIVEAM
+:DEPENDS-ON          = (:ALEXANDRIA :OPTIMA :ITERATE)
+
+Current local configuration:
+(no configuration specified)
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [CREATE] Create
+ 1: [RESET-LOCAL-CONFIG] Reset the current local config
+ 2: [ADD-LOCAL-DEPENDENCY] Add-Local-Dependency
+ 3: [NAME] Name
+ 4: [ABORT] Return to sldb level 1.
+ 5: [UP] Back to the section EP-MAIN.
+ --more--
+#+END_SRC
+
+Finally, select =CREATE=. It will set up the repository, initialize the
+repo with git, and =git add= everything in the folder(but not commit).
+
+** Restore the Yesterday
+
+In the EP-MAIN main menu, select the =SESSION= submenu.
+
+#+BEGIN_SRC 
+(You are now in menu EP-MAIN.)
+What to do next?
+
+Here are current default configs:
+:SESSION.SYSTEMS     = (...
+                        "fare-quasiquote")
+:SESSION.PACKAGE     = "COMMON-LISP-USER"
+:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
+:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
+:AUTHOR              = "Masataro Asai"
+:EMAIL               = "guicho2.71828@gmail.com"
+:GIT                 = T
+:README-EXTENSION    = "md"
+:SOURCE-DIR          = "src"
+:TEST-DIR            = "t"
+:TEST-SUBNAME        = "test"
+:DELIMITER           = "."
+:LICENSE             = "LLGPL"
+:TEST                = :FIVEAM
+:DEPENDS-ON          = (:ALEXANDRIA :OPTIMA :ITERATE)
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [SESSION] Save/Restore the currently loaded libraries
+ 1: [CREATE-PROJECT] Create a new project.
+ 2: [SET-GLOBAL] Modify these default values
+ 3: [UP] Back to the section EP-MAIN.
+ 4: [QUIT-SESSION] Quit this session.
+ 5: [RETRY] Retry SLIME REPL evaluation request.
+#+END_SRC
+
+Then, SAVE or RESTORE the current session. SAVE will store the current
+=*package*= and =asdf:already-loaded-systems= to the database for the later
+restoration. RESTORE will restore the saved session. Finally, TOGGLE-WATCH
+will initiate watching, which periodically initiate the SAVE command.
+
+** installation
+
 To load this library, clone the repo into the quicklisp's local-project
 directory and run
 =(ql:register-local-project)(ql:quickload :eazy-project)=.

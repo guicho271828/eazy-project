@@ -36,25 +36,26 @@
 
 @export
 (defun save-config ()
-  (format t "~&Saving the default config to ~a~%"
+  (format t "~& [Saving the default config to ~a]~%"
           *config-path*)
   (with-open-file (s *config-path*
                      :direction :output
                      :if-exists :supersede)
 
-    (prin1 (list :local-repository *local-repository*
-                 :skeleton-directory *skeleton-directory*
-                 :author *author*
-                 :email *email*
-                 :git t
-                 :readme-extension "md"
-                 :source-dir "src"
-                 :test-dir "t"
-                 :test-subname "test"
-                 :delimiter "."
-                 :license "LLGPL"
-                 :test :fiveam
-                 :depends-on '(:alexandria :optima :iterate))
+    (prin1 (or *config*
+               (list :local-repository *local-repository*
+                     :skeleton-directory *skeleton-directory*
+                     :author *author*
+                     :email *email*
+                     :git t
+                     :readme-extension "md"
+                     :source-dir "src"
+                     :test-dir "t"
+                     :test-subname "test"
+                     :delimiter "."
+                     :license "LLGPL"
+                     :test :fiveam
+                     :depends-on '(:alexandria :optima :iterate)))
            s)))
 
 @export
@@ -62,7 +63,7 @@
   (block nil
     (tagbody
      :start
-       (format t "~&loading the default config from ~a~%"
+       (format t "~& [loading the default config from ~a]~%"
                *config-path*)
        (handler-case
            (with-open-file (s *config-path*

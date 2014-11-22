@@ -20,16 +20,15 @@ Current configuration:
 (defun update-config-item (what new &optional local)
   (progn
     (setf *recent-change* what)
-    (q "Updated the information: ~2%~a ~%-> ~a~2%~
-        Select other options again in the debugger menu. Thank you.~2%"
-       (getf (if local *project-config* *config*) what) new)
+    (q "Updated the information of ~a: ~2%~a ~%-> ~a~2%~
+        Select other options again in the debugger menu. Thank you.~%"
+       what (if local (l what) (g what)) new)
     (if local
-        (if *project-config*
-            (setf (getf *project-config* what) new)
-            (setf *project-config* (list what new)))
-        (setf (getf *config* what) new))
+        (setf (l what) new)
+        (setf (g what) new))
     (unless local
       (save-config))))
+
 (defun print-config-update-direction (what &optional local)
   (q "~%~20@<Current:~> ~A~%~20@<Empty Line:~> cancel~%> "
      (getf (if local *project-config* *config*) what "")))
@@ -50,9 +49,7 @@ Current configuration:
   (set-x :email))
 
 (defmenu (git :in set-global :message "Toggle git initialization")
-  (q "~:[En~;Dis~]abling git..." (getf *config* :git))
-  (setf (getf *config* :git)
-        (not (getf *config* :git)))
+  (toggle-global :git)
   (up))
 
 (defmenu (add-dependency :in set-global)
@@ -65,7 +62,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
         (union
          (list (intern (string-upcase str)
                        (find-package "KEYWORD")))
-         (getf *config* :depends-on))))
+         (g :depends-on))))
   (up))
 
 (defmenu (test :in set-global)

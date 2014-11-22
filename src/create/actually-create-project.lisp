@@ -20,17 +20,17 @@ Actual Parameters:
 ~{~20@<~s~> = ~s~%~}" *project-config*)
     (let ((*print-case* :downcase))
       (walk-directory 
-       (getf *project-config* :skeleton-directory)
+       (l :skeleton-directory)
        #'process-file
        :test #'not-includefile-p))
 
     ;; misc
 
-    (when (getf *project-config* :git)
+    (when (l :git)
       (let ((*default-pathname-defaults*
              (merge-pathnames
-              (getf *project-config* :name)
-              (getf *project-config* :local-repository))))
+              (l :name)
+              (l :local-repository))))
         (princ (shell-command
                 (format nil "cd ~a; git init; git add *"
                         *default-pathname-defaults*)))))))
@@ -60,14 +60,14 @@ Actual Parameters:
             (enough-namestring
              processed-filename
              (pathname-as-directory 
-              (getf *project-config* :skeleton-directory))))
+              (l :skeleton-directory))))
            ;; this should be x/y.lisp
            ;; then merge to the target dirname
            ;; e.g. ~/myrepos/ + x/y.lisp
            (final-pathname
             (merge-pathnames 
              relative-from-skeleton
-             (getf *project-config* :local-repository))))
+             (l :local-repository))))
       (ensure-directories-exist final-pathname :verbose t)
       ;; now convert the contents
       (let ((str (execute-emb tpl-path :env *project-config*)))
@@ -89,8 +89,8 @@ Actual Parameters:
     ,key
     ',depends-on
     (lambda ()
-      (symbol-macrolet ((,global (getf *config* ,key))
-                        (,local (getf *project-config* ,key)))
+      (symbol-macrolet ((,global (g ,key))
+                        (,local (l ,key)))
         (declare (ignorable ,global ,local))
         ,@body))))
 
@@ -119,9 +119,9 @@ Actual Parameters:
          key nil
          (lambda ()
            (format t "~%   Superseding the global settings...")
-           (setf (getf *project-config* key)
-                 (or (getf *project-config* key)
-                     (getf *config* key)))
+           (setf (l key)
+                 (or (l key)
+                     (g key)))
            (print *project-config*)))))
 
 ;; however, few are not...
@@ -141,17 +141,17 @@ Actual Parameters:
 
 (defprocessor (:test-template g l (:test))
   (setf l (format nil "~(~a~).lisp"     ; includes/fiveam.lisp
-                  (getf *project-config* :test))))
+                  (l :test))))
 
 (defprocessor (:test-name g l (:name :test-subname :delimiter))
   (setf l (format nil "~a~a~a"
-                  (getf *project-config* :name)
-                  (getf *project-config* :delimiter)
-                  (getf *project-config* :test-subname))))
+                  (l :name)
+                  (l :delimiter)
+                  (l :test-subname))))
 
 (defprocessor (:readme-filename g l (:readme-extension))
   (setf l (format nil "README.~a"
-                  (getf *project-config* :readme-extension))))
+                  (l :readme-extension))))
 
 
 

@@ -30,3 +30,16 @@ else, run `else'."
   (apply #'format *query-io* format-control
          format-arguments))
 
+(defmacro g (key)
+  "get/set the global configuration data"
+  `(getf *config* ,key))
+(defmacro l (key)
+  "get/set the project local configuration data"
+  `(getf *project-config* ,key))
+
+
+(defun toggle-global (key)
+  "Toggle a global config (T <-> NIL)"
+  (q "~:[En~;Dis~]abling ~a..." (g key) key)
+  (setf (g key) (not (g key))))
+
