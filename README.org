@@ -1,7 +1,8 @@
 * EAZY-Project - Interactive Project Generator & Manager
 
-This is basically a fork from cl-project@fukamachi.
-I use it for myself.
+This used to be a fork from cl-project@fukamachi, but since almost everything is
+rewritten and added very much of new features, I renamed it as a new library.
+*I use it for myself.* It is now focused on lots of interactive features.
 
 Usage:
 #+BEGIN_SRC 
@@ -13,13 +14,14 @@ Usage:
 
 ;; or its synonim :
 eazy-project:!
+
+;;; Then, follow the instruction that appears in the debugger.
 #+END_SRC
 
-And follow the instruction that appears in the debugger.
-
-** Generate a project
+** Tutorial: Generate a project
 
 First, open the debugger menu with =!=.
+The default data will have already been customized for you.
 
 #+BEGIN_SRC 
 (You are now in menu EP-MAIN.)
@@ -53,9 +55,14 @@ Restarts:
  5: [RETRY] Retry SLIME REPL evaluation request.
 #+END_SRC
 
-Select =create-project=. A new debugger menu appears,
-so select =name= to enter the name of the new project.
-You can further add the dependencies.
+Select =CREATE-PROJECT=, a new debugger menu appears.  Select =NAME= to
+enter the name of the new project (if when you attempt to create a project
+without it, the generator complains and opens an interactive prompt).
+
+You can further add the dependencies. The default dependency can be
+customized from the menus under =EP-MAIN -> SET-GLOBAL=.
+Also, you can modify the customization file directly. It is saved in
+=<eazy-project-repo>/default-config.lisp=. 
 
 #+BEGIN_SRC 
 (You are now in menu CREATE-PROJECT.)
@@ -90,10 +97,11 @@ Restarts:
 #+END_SRC
 
 Finally, select =CREATE=. It will set up the repository, initialize the
-repo with git, and =git add= everything in the folder(but not commit).
+repo with git (by default. It can be disabled).
 
-** Restore the Yesterday
+** Restore the Yesterday's Coding Environment
 
+RYCE feature saves and restores the set of loaded libraries.
 In the EP-MAIN main menu, select the =SESSION= submenu.
 
 #+BEGIN_SRC 
@@ -104,19 +112,8 @@ Here are current default configs:
 :SESSION.SYSTEMS     = (...
                         "fare-quasiquote")
 :SESSION.PACKAGE     = "COMMON-LISP-USER"
-:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
-:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
-:AUTHOR              = "Masataro Asai"
-:EMAIL               = "guicho2.71828@gmail.com"
-:GIT                 = T
-:README-EXTENSION    = "md"
-:SOURCE-DIR          = "src"
-:TEST-DIR            = "t"
-:TEST-SUBNAME        = "test"
-:DELIMITER           = "."
-:LICENSE             = "LLGPL"
-:TEST                = :FIVEAM
-:DEPENDS-ON          = (:ALEXANDRIA :OPTIMA :ITERATE)
+...
+...
    [Condition of type EAZY-PROJECT:ASK]
 
 Restarts:
@@ -129,11 +126,11 @@ Restarts:
 #+END_SRC
 
 Then, SAVE or RESTORE the current session. SAVE will store the current
-=*package*= and =asdf:already-loaded-systems= to the database for the later
+=*package*= and =asdf:already-loaded-systems= to a database for the later
 restoration. RESTORE will restore the saved session. Finally, TOGGLE-WATCH
 will initiate watching, which periodically initiate the SAVE command.
 
-** installation
+** Installation
 
 To load this library, clone the repo into the quicklisp's local-project
 directory and run
