@@ -57,8 +57,9 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
   (toggle-global :session.watch)
   (update-config-item :session.watch.min
                       (or (g :session.watch.min) 30))
-  (update-config-item :session.watch.min
+  (update-config-item :session.watch.max
                       (or (g :session.watch.max) 180))
   (when (g :session.watch)
-    (enable-watch)))
+    (enable-watch))
+  (quit-menu))
 
