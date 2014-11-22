@@ -17,23 +17,6 @@ Current configuration:
          *config*)
     ))
 
-(defun update-config-item (what new &optional local)
-  (progn
-    (setf *recent-change* what)
-    (q "Updated the information of ~a: ~2%~a ~%-> ~a~2%~
-        Select other options again in the debugger menu. Thank you.~%"
-       what (if local (l what) (g what)) new)
-    (if local
-        (setf (l what) new)
-        (setf (g what) new))
-    (unless local
-      (save-config))))
-
-(defun print-config-update-direction (what &optional local)
-  (q "~%~20@<Current:~> ~A~%~20@<Empty Line:~> cancel~%> "
-     (getf (if local *project-config* *config*) what "")))
-
-
 (macrolet ((set-x (what &optional control)
              `(defmenu (,what :in set-global)
                 ,(if control

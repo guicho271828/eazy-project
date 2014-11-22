@@ -12,7 +12,8 @@
           :message "Restore the past loaded session")
   (format t "~&[Restoring the session....]~%")
   (mapc #'asdf:load-system
-        (remove "eazy-project" (g :session.systems) :test #'string=))
+        (remove "eazy-project" (g :session.systems)
+                :test #'search))
   (setf *package* (find-package (g :session.package)))
   (format t "~&Done! Happy Hacking!~2%")
   (quit-menu))
@@ -28,7 +29,7 @@
                       (g :session.systems)
                       :test #'string=))
       (progn
-        (format t "~& [Session Unchanged!]~%")
+        (format t "~& [Session Unchanged! Doubling the watch time...]~%")
         nil)
       (progn
         (update-config-item :session.package (package-name *package*))
@@ -59,7 +60,11 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
                       (or (g :session.watch.min) 30))
   (update-config-item :session.watch.max
                       (or (g :session.watch.max) 180))
-  (when (g :session.watch)
-    (enable-watch))
+  (try-initiate-watch)
   (quit-menu))
 
+(defun try-initiate-watch ()
+  (when (g :session.watch)
+    (enable-watch)))
+
+(try-initiate-watch)

@@ -43,3 +43,19 @@ else, run `else'."
   (q "~:[En~;Dis~]abling ~a..." (g key) key)
   (setf (g key) (not (g key))))
 
+
+(defun update-config-item (what new &optional local (how #'equalp))
+  (unless (funcall how new (if local (l what) (g what)))
+    (setf *recent-change* what)
+    (q "Updated the information of ~a: ~2%~a ~%-> ~a~2%~
+        Select other options again in the debugger menu. Thank you.~%"
+       what (if local (l what) (g what)) new)
+    (if local
+        (setf (l what) new)
+        (setf (g what) new))
+    (unless local
+      (save-config))))
+
+(defun print-config-update-direction (what &optional local)
+  (q "~%~20@<Current:~> ~A~%~20@<Empty Line:~> cancel~%> "
+     (getf (if local *project-config* *config*) what "")))
