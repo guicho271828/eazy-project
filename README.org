@@ -18,6 +18,16 @@ eazy-project:!
 ;;; Then, follow the instruction in the menu that appears in the debugger.
 #+END_SRC
 
+** To load w/o automatically launching the menu
+
+=(ql:quickload :eazy-project.impl)= does not launch the menu automatically.
+
+** Installation
+
+To load this library, clone the repo into the quicklisp's local-project
+directory and run
+=(ql:register-local-project)(ql:quickload :eazy-project)=.
+
 ** Tutorial: Restore the Yesterday's Coding Environment
 
 RYCE feature saves and restores the set of currently loaded libraries.
@@ -125,20 +135,15 @@ configurations. These configurations are not memorised into the database.
 + Select =NAME= to enter the name of the new project (if when you attempt
   to create a project without it, the generator complains and opens an
   interactive prompt).
-+ You can further add the dependencies. The default dependency can be
-  customized from the menus under =EP-MAIN -> SET-GLOBAL=. Also, you can
-  modify the customization file directly. It is saved in
-  =<eazy-project-repo>/default-config.lisp=.
++ You can further add the dependencies.
+  + The project-local dependency (only for this project) can be added by
+    ADD-LOCAL-DEPENDENCY submenu.
+  + The default dependency can be
+    customized in the menu =EP-MAIN -> SET-GLOBAL=.
+  + The default dependency can be modified by editing the customization
+    file directly. It is saved in
+    =<eazy-project-repo>/default-config.lisp=.
 
 Finally, select =CREATE=. It will set up the repository, initialize the
 repo with git (by default. It can be disabled).
 
-** Installation
-
-To load this library, clone the repo into the quicklisp's local-project
-directory and run
-=(ql:register-local-project)(ql:quickload :eazy-project)=.
-
-** To load w/o automatically launching the menu
-
-=(ql:quickload :eazy-project.impl)= does not launch the menu automatically.
