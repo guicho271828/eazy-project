@@ -15,13 +15,57 @@ Usage:
 ;; or its synonim :
 eazy-project:!
 
-;;; Then, follow the instruction that appears in the debugger.
+;;; Then, follow the instruction in the menu that appears in the debugger.
 #+END_SRC
+
+** Tutorial: Restore the Yesterday's Coding Environment
+
+RYCE feature saves and restores the set of currently loaded libraries.
+In the main menu, select the =SESSION= submenu.
+
+Main menu:
+#+BEGIN_SRC 
+(You are now in menu EP-MAIN.)
+What to do next?
+...
+...
+...
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [SESSION] Save/Restore the currently loaded libraries
+ 1: [CREATE-PROJECT] Create a new project.
+ 2: [SET-GLOBAL] Modify these default values
+ 3: [UP] Back to the section EP-MAIN.
+ 4: [QUIT-SESSION] Quit this session.
+ 5: [RETRY] Retry SLIME REPL evaluation request.
+#+END_SRC
+
+SESSION submenu:
+#+BEGIN_SRC 
+(You are now in menu SESSION.)
+What to do next?
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [TOGGLE-WATCH] Watch and automatically save the session
+ 1: [ADD-DEFAULT-SYSTEM] Add-Default-System
+ 2: [SAVE] Save the current loaded session
+ 3: [ABORT] Return to sldb level 1.
+ 4: [UP] Back to the section EP-MAIN.
+ 5: [QUIT-MENU] Quit this eazy-project menu.
+#+END_SRC
+
+Then, SAVE or RESTORE the current session. SAVE will store the current
+=*package*= and =asdf:already-loaded-systems= to a database for the later
+restoration. RESTORE will restore the saved session. Finally, TOGGLE-WATCH
+will initiate watching, which periodically initiate the SAVE command.
 
 ** Tutorial: Generate a project
 
-First, open the debugger menu with =!=.
+First, open the menu.
 The default data will have already been customized for you.
+It should look something like this (depending on the implementation).
 
 #+BEGIN_SRC 
 (You are now in menu EP-MAIN.)
@@ -55,32 +99,13 @@ Restarts:
  5: [RETRY] Retry SLIME REPL evaluation request.
 #+END_SRC
 
-Select =CREATE-PROJECT=, a new debugger menu appears.  Select =NAME= to
-enter the name of the new project (if when you attempt to create a project
-without it, the generator complains and opens an interactive prompt).
-
-You can further add the dependencies. The default dependency can be
-customized from the menus under =EP-MAIN -> SET-GLOBAL=.
-Also, you can modify the customization file directly. It is saved in
-=<eazy-project-repo>/default-config.lisp=. 
+Select =CREATE-PROJECT=, a new debugger menu would appear. 
 
 #+BEGIN_SRC 
 (You are now in menu CREATE-PROJECT.)
 Select and enter the information, then select 'CREATE'.
 Current global configuration:
-:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
-:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
-:AUTHOR              = "Masataro Asai"
-:EMAIL               = "guicho2.71828@gmail.com"
-:GIT                 = T
-:README-EXTENSION    = "md"
-:SOURCE-DIR          = "src"
-:TEST-DIR            = "t"
-:TEST-SUBNAME        = "test"
-:DELIMITER           = "."
-:LICENSE             = "LLGPL"
-:TEST                = :FIVEAM
-:DEPENDS-ON          = (:ALEXANDRIA :OPTIMA :ITERATE)
+....
 
 Current local configuration:
 (no configuration specified)
@@ -91,44 +116,22 @@ Restarts:
  1: [RESET-LOCAL-CONFIG] Reset the current local config
  2: [ADD-LOCAL-DEPENDENCY] Add-Local-Dependency
  3: [NAME] Name
- 4: [ABORT] Return to sldb level 1.
- 5: [UP] Back to the section EP-MAIN.
- --more--
+...
 #+END_SRC
+
+In this submenu, you can further modify several /project-local/
+configurations. These configurations are not memorised into the database.
+
++ Select =NAME= to enter the name of the new project (if when you attempt
+  to create a project without it, the generator complains and opens an
+  interactive prompt).
++ You can further add the dependencies. The default dependency can be
+  customized from the menus under =EP-MAIN -> SET-GLOBAL=. Also, you can
+  modify the customization file directly. It is saved in
+  =<eazy-project-repo>/default-config.lisp=.
 
 Finally, select =CREATE=. It will set up the repository, initialize the
 repo with git (by default. It can be disabled).
-
-** Restore the Yesterday's Coding Environment
-
-RYCE feature saves and restores the set of loaded libraries.
-In the EP-MAIN main menu, select the =SESSION= submenu.
-
-#+BEGIN_SRC 
-(You are now in menu EP-MAIN.)
-What to do next?
-
-Here are current default configs:
-:SESSION.SYSTEMS     = (...
-                        "fare-quasiquote")
-:SESSION.PACKAGE     = "COMMON-LISP-USER"
-...
-...
-   [Condition of type EAZY-PROJECT:ASK]
-
-Restarts:
- 0: [SESSION] Save/Restore the currently loaded libraries
- 1: [CREATE-PROJECT] Create a new project.
- 2: [SET-GLOBAL] Modify these default values
- 3: [UP] Back to the section EP-MAIN.
- 4: [QUIT-SESSION] Quit this session.
- 5: [RETRY] Retry SLIME REPL evaluation request.
-#+END_SRC
-
-Then, SAVE or RESTORE the current session. SAVE will store the current
-=*package*= and =asdf:already-loaded-systems= to a database for the later
-restoration. RESTORE will restore the saved session. Finally, TOGGLE-WATCH
-will initiate watching, which periodically initiate the SAVE command.
 
 ** Installation
 
@@ -136,3 +139,6 @@ To load this library, clone the repo into the quicklisp's local-project
 directory and run
 =(ql:register-local-project)(ql:quickload :eazy-project)=.
 
+** To load w/o automatically launching the menu
+
+=(ql:quickload :eazy-project.impl)= does not launch the menu automatically.
