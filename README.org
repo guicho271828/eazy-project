@@ -20,7 +20,7 @@ eazy-project:!
 
 ** To load w/o automatically launching the menu
 
-=(ql:quickload :eazy-project.impl)= does not launch the menu automatically.
+=(ql:quickload :eazy-project.impl)= does not launch the menu.
 
 ** Installation
 
