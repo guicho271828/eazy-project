@@ -25,8 +25,14 @@
                  (:file :ask)
                  (:file :loop)
                  (:file :menu-definitions)
-                 (:file :create-project)
-                 (:file :actually-create-project)
+                 (:module "create"
+                          :components
+                          ((:file :global)
+                           (:file :project-local)
+                           (:file :actually-create-project)))
+                 (:module "restore"
+                          :components
+                          ((:file :restore)))
                  (:file :autoload))
                 :serial t))
   :description "Generate and Manage a Project"
