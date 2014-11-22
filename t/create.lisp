@@ -34,24 +34,22 @@
 (test create
   (let ((*config* (copy-seq *config*)))
     (setf (getf *config* :LOCAL-REPOSITORY) *projects*)
+    (setf (getf *config* :depends-on) nil)
     (shell-command (format nil "rm -rf ~a" *projects*))
     (finishes
       (simulate-menu-selection
        `((eazy-project::create-project)
          (:name "test")
          (eazy-project::create))))
-    (is
-     (probe-file (merge-pathnames "test/test.asd" *projects*)))
+    (is (probe-file (merge-pathnames "test/test.asd" *projects*)))
+    (is (member "test" (asdf:already-loaded-systems) :test #'string=))
     (finishes
-      (load
-       (merge-pathnames "test/test.asd" *projects*))
       (load
        (merge-pathnames "test/test.test.asd" *projects*)))
     (is-true
-     (asdf:load-system :test))
-    (is-true
-     (asdf:load-system :test.test))))
+     (asdf:load-system :test.test))
+    (is (member "test.test" (asdf:already-loaded-systems) :test #'string=))))
 
 
-    
+
      

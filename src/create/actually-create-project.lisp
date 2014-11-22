@@ -26,14 +26,22 @@ Actual Parameters:
 
     ;; misc
 
-    (when (l :git)
-      (let ((*default-pathname-defaults*
-             (merge-pathnames
-              (l :name)
-              (l :local-repository))))
+    (let ((*default-pathname-defaults*
+           (pathname-as-directory 
+            (merge-pathnames
+             (l :name)
+             (l :local-repository)))))
+
+      ;; git
+      (when (l :git)
         (princ (shell-command
                 (format nil "cd ~a; git init; git add *"
-                        *default-pathname-defaults*)))))))
+                        *default-pathname-defaults*))))
+    
+      ;; autoload asd
+      (load (merge-pathnames
+             (format nil "~a.asd" (l :name))))
+      (asdf:load-system (l :name)))))
 
 (defun not-includefile-p (path)
   (declare (ignore path))

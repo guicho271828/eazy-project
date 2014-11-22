@@ -9,5 +9,4 @@
                 ((:file :autoload))
                 :serial t))
   :description "Generate and Manage Projects. This system automatically
-  loads and initiate (launch-menu)."
-  :in-order-to ((test-op (load-op eazy-project-test))))
+  loads and initiate (launch-menu).")

@@ -55,7 +55,7 @@
                      :delimiter "."
                      :license "LLGPL"
                      :test :fiveam
-                     :depends-on '(:alexandria :optima :iterate)))
+                     :depends-on '(:alexandria :iterate)))
            s)))
 
 @export
