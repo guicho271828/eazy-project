@@ -21,6 +21,7 @@
         (update-interval interval))))  ;; nil: increase interval
 
 (defun enable-watch ()
+  (format t "~&[Initiated a session watcher]~&")
   (bt:make-thread #'watch :name "session watcher thread")
   (setf *main-thread* (bt:current-thread)))
 
