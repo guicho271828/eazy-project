@@ -7,7 +7,8 @@
 (defpackage :<% @var test-name %>
   (:use :cl
         :<% @var name %>
-        :<% @var test %>))
+        :<% @var test %>
+        <% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>))
 (in-package :<% @var test-name %>)
 
 <%= (cl-emb:execute-emb

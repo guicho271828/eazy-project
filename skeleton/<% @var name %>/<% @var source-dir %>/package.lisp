@@ -5,7 +5,7 @@
 
 (in-package :cl-user)
 (defpackage <% @var name %>
-  (:use :cl))
+  (:use :cl <% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>))
 (in-package :<% @var name %>)
 
 ;; blah blah blah.
