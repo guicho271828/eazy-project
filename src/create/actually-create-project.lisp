@@ -5,39 +5,44 @@
 ;; (defvar *final-config-vars nil)
 (defun actually-create-project ()
   (let ((*done* nil))
-    (iter (until
-           (iter
-             (for (key value) in-hashtable *processors*)
-             (always (funcall value)))))
+    (iter (for failure = 
+               (iter
+                 (for (key value) in-hashtable *processors*)
+                 (count (not (funcall value)))))
+          (for prev previous failure)
+          (until (zerop failure))
+          (unless (first-time-p)
+            (when (= failure prev)
+              (error "~&Dependency not satisfied! This is a shame, consult to a developper"))))
 
-
-    (format t "~2&Processing templates.
-Global Parameters:
-~{~20@<~s~> = ~s~%~}" *config*)
+    ;; (format t "~2&Processing templates.
+;; Global Parameters:
+;; ~{~20@<~s~> = ~s~%~}" *config*)
 
     (format t "~2&Processing templates.
 Actual Parameters:
 ~{~20@<~s~> = ~s~%~}" *project-config*)
-    (let ((*print-case* :downcase))
-      (walk-directory 
-       (l :skeleton-directory)
-       #'process-file
-       :test #'not-includefile-p))
-
-    ;; misc
 
     (let ((*default-pathname-defaults*
            (pathname-as-directory 
             (merge-pathnames
              (l :name)
              (l :local-repository)))))
-
+      ;; creation
+      (unwind-protect-case ()  
+          (let ((*print-case* :downcase))
+            (walk-directory 
+             (l :skeleton-directory)
+             #'process-file
+             :test #'not-includefile-p))
+        (:abort (shell-command
+                 (format nil "rm -rf ~a"
+                         *default-pathname-defaults*))))
       ;; git
       (when (l :git)
         (princ (shell-command
                 (format nil "cd ~a; git init; git add *"
                         *default-pathname-defaults*))))
-    
       ;; autoload asd
       (load (merge-pathnames
              (format nil "~a.asd" (l :name))))

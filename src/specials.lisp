@@ -38,25 +38,29 @@
 (defun save-config ()
   (format t "~& [Saving the default config to ~a]~%"
           *config-path*)
-  (with-open-file (s *config-path*
-                     :direction :output
-                     :if-exists :supersede)
+  (handler-bind ((error (lambda (c)
+                          @ignore c
+                          (when (probe-file *config-path*)
+                            (delete-file *config-path*)))))
+    (with-open-file (s *config-path*
+                       :direction :output
+                       :if-exists :supersede)
 
-    (prin1 (or *config*
-               (list :local-repository *local-repository*
-                     :skeleton-directory *skeleton-directory*
-                     :author *author*
-                     :email *email*
-                     :git t
-                     :readme-extension "md"
-                     :source-dir "src"
-                     :test-dir "t"
-                     :test-subname "test"
-                     :delimiter "."
-                     :license "LLGPL"
-                     :test :fiveam
-                     :depends-on '(:alexandria :iterate)))
-           s)))
+      (prin1 (or *config*
+                 (list :local-repository *local-repository*
+                       :skeleton-directory *skeleton-directory*
+                       :author *author*
+                       :email *email*
+                       :git t
+                       :readme-extension "md"
+                       :source-dir "src"
+                       :test-dir "t"
+                       :test-subname "test"
+                       :delimiter "."
+                       :license "LLGPL"
+                       :test :fiveam
+                       :depends-on '(:alexandria :iterate)))
+             s))))
 
 @export
 (defun read-config ()
@@ -68,9 +72,22 @@
        (handler-case
            (with-open-file (s *config-path*
                               :if-does-not-exist :error)
-             (return-from nil (read s)))
+             (return-from nil
+               (handler-case
+                   (read s)
+                 (error (c)
+                   @ignore c
+                   (format *error-output* "~&Syntax error found in ~a, replacing with the default settings"
+                           *config-path*)
+                   (let ((old (make-pathname :type "old" :defaults *config-path*)))
+                     (format *error-output* "~&Erroneous file is moved to ~a"
+                             old)
+                     (shell-command (format nil "mv ~a ~a" *config-path* old)))
+                   (go :start)))))
          (file-error (c)
            @ignore c
+           (format *error-output* "~&File not found in ~a, writing the default settings"
+                   *config-path*)
            (save-config)
            ;; retry
            (go :start))))))
@@ -82,7 +99,7 @@
   (load-config))
 
 @export
-(defvar *config*)
+(defvar *config* nil)
 
 @export
 (defun load-config ()
