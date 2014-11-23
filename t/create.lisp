@@ -48,7 +48,8 @@
        (merge-pathnames "test/test.test.asd" *projects*)))
     (is-true
      (asdf:load-system :test.test))
-    (is (member "test.test" (asdf:already-loaded-systems) :test #'string=))))
+    (is (member "test.test" (asdf:already-loaded-systems) :test #'string=))
+    (shell-command (format nil "rm -rf ~a" *projects*))))
 
 
 
