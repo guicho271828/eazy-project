@@ -6,14 +6,15 @@ rewritten and added very much of new features, I renamed it as a new library.
 
 Usage:
 #+BEGIN_SRC 
-(ql:quickload :eazy-project)
+(ql:quickload :eazy-project.autoload)
 ;; no command is required, all you need is to load the library
 
-;; or, if the library is loaded in the image, try
-(eazy-project:launch-menu)
+;; if you do not want to launch a menu (and only to load the library),
+(ql:quickload :eazy-project)
 
-;; or its synonim :
-eazy-project:!
+;; to launch a menu maually,
+(eazy-project:launch-menu) ; or
+eazy-project:!             ; use this synonym
 
 ;;; Then, follow the instruction in the menu that appears in the debugger.
 #+END_SRC
