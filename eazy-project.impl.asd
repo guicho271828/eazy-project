@@ -10,7 +10,10 @@
                :osicat
                :cl-syntax
                :cl-syntax-annot
-               :local-time)
+               :local-time
+               :iterate
+               #+sbcl :sb-cltl2
+               )
   :components ((:module "src"
                 :components
                 ((:file :namespace)

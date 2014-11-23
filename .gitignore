@@ -8,3 +8,4 @@
 t/sample*
 
 /default-config.lisp
+/default-config.old
