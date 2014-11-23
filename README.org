@@ -18,6 +18,8 @@ eazy-project:!
 ;;; Then, follow the instruction in the menu that appears in the debugger.
 #+END_SRC
 
+Tested on SBCL-1.2.1 x64 and CCL 1.9 x64.
+
 ** To load w/o automatically launching the menu
 
 =(ql:quickload :eazy-project.impl)= does not launch the menu.
