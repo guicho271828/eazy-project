@@ -25,7 +25,7 @@
 (defun save-session ()
   (if (and (string= (package-name *package*)
                     (g :session.package))
-           (set-equal (asdf:already-loaded-systems)
+           (set-equal (implementation-independent-systems)
                       (g :session.systems)
                       :test #'string=))
       (progn
@@ -38,6 +38,11 @@
         (format t "~& [Session Saved! Resetting the watch interval to ~a]~%"
                 (g :session.watch.min))
         t)))
+
+(defun implementation-independent-systems ()
+  (remove-if (lambda (str)
+               (typep (asdf:find-system str) 'asdf:require-system))
+             (asdf:already-loaded-systems)))
 
 (defmenu (add-default-system :in session)
   (q "Enter a name of a library. The input string is converted to a keyword.
