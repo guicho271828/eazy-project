@@ -1,13 +1,14 @@
 (in-package :eazy-project)
 
-(defvar *processors* (make-hash-table))
+(define-namespace processor)
+
 (defvar *done* nil)
-;; (defvar *final-config-vars nil)
+
 (defun actually-create-project ()
   (let ((*done* nil))
     (iter (for failure = 
                (iter
-                 (for (key value) in-hashtable *processors*)
+                 (for (key value) in-hashtable *processor-table*)
                  (count (not (funcall value)))))
           (for prev previous failure)
           (until (zerop failure))
@@ -108,7 +109,7 @@ Actual Parameters:
         ,@body))))
 
 (defun add-processor (key depends-on fn)
-  (setf (gethash key *processors*)
+  (setf (symbol-processor key)
         (lambda ()
           (if (done key)
               t
