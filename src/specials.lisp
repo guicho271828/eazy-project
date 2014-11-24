@@ -59,7 +59,9 @@
                        :delimiter "."
                        :license "LLGPL"
                        :test :fiveam
-                       :depends-on '(:alexandria :iterate)))
+                       :depends-on '(:alexandria :iterate)
+                       :session.watch.max 300
+                       :session.watch.min 30))
              s))))
 
 @export
