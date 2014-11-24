@@ -45,14 +45,22 @@ debugging purpose. I assume there won't be so many additional namespaces.
     (error "~a cannot be used as a namespace because it conflicts with the standard Common Lisp!"
            name))
   (let ((accessor (symbolicate "SYMBOL-" name))
-        (hash (symbolicate "*" name "-TABLE*")))
+        (hash (symbolicate "*" name "-TABLE*"))
+        (condition (symbolicate "UNBOUND-" name))
+        (boundp (symbolicate name "-BOUNDP")))
     `(progn
        (defvar ,hash (make-hash-table :test 'eq))
+       (define-condition ,condition (unbound-variable) ()
+         (:report (lambda (c s) (format s "Symbol ~a is unbound in namespace ~a"
+                                        (cell-error-name c) ',name))))
        (declaim (ftype (function (symbol &optional (or null ,expected-type)) ,expected-type) ,accessor))
-       (defun ,accessor (symbol &optional (default nil default-provided-p))
-         (if default-provided-p
-             (gethash symbol ,hash default)
-             (gethash symbol ,hash)))
+       (defun ,accessor (symbol)
+         (multiple-value-bind (value found)
+             (gethash symbol ,hash)
+           (if found value
+               (error ',condition :name symbol))))
+       (defun ,boundp (symbol)
+         (nth-value 1 (gethash symbol ,hash)))
        (declaim (ftype (function (,expected-type symbol) ,expected-type) (setf ,accessor)))
        (defun (setf ,accessor) (new-value symbol)
          ,@(if (speed-requird)

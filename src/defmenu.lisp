@@ -33,12 +33,13 @@
                          (message (string-capitalize name))
                          (in name parent-provided-p)) &body body)
   (assert (symbolp name))
-  `(progn
+  `(block defmenu
      ;; invalidation
-     (when-let ((old (symbol-menu ',name)))
-       (warn "Redefining menu: ~a" ',name)
-       (let ((old-parent (menu-parent old)))
-         (removef (gethash old-parent *parent-children-db*) ',name)))
+     (when (menu-boundp ',name)
+       (let ((old (symbol-menu ',name)))
+         (warn "Redefining menu: ~a" ',name)
+         (let ((old-parent (menu-parent old)))
+           (removef (gethash old-parent *parent-children-db*) ',name))))
      (defun ,name (&rest *menu-arguments*)
        (invoke-menu (symbol-menu ',name)))
      (let* ((menuobj
