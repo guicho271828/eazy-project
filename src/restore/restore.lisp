@@ -14,8 +14,11 @@
   (mapc #'asdf:load-system
         (remove "eazy-project" (g :session.systems)
                 :test #'search))
-  (setf *future-package* (find-package (g :session.package)))
-  (format t "~&Done.~2%")
+  (if (g :session.package)
+      (progn
+        (setf *future-package* (find-package (g :session.package)))
+        (format t "~&[Done.]~2%"))
+      (format t "~&[No saved session found. To save a session, go EP-MENU > SESSION > SAVE]~2%"))
   (quit-menu))
 
 (defmenu (save :in session
