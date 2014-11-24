@@ -20,7 +20,8 @@
 
 (defmenu (save :in session
                :message "Save the current loaded session")
-  (save-session))
+  (save-session)
+  (quit-menu))
 
 (defun save-session ()
   (if (and (string= (package-name *package*)
