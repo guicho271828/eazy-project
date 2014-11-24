@@ -14,11 +14,12 @@
 @export
 (defun launch-menu ()
   "launch the menu."
-  (restart-case
-      (invoke-menu 'ep-main)
-    (:quit-menu ()
-      :report "Quit this eazy-project menu."
-      )))
+  (unwind-protect
+       (restart-case
+           (invoke-menu 'ep-main)
+         (:quit-menu ()
+           :report "Quit this eazy-project menu."))
+    (setf *package* *future-package*)))
 
 
 @export

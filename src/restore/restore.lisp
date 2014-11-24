@@ -14,8 +14,8 @@
   (mapc #'asdf:load-system
         (remove "eazy-project" (g :session.systems)
                 :test #'search))
-  (setf *package* (find-package (g :session.package)))
-  (format t "~&Done! Happy Hacking!~2%")
+  (setf *future-package* (find-package (g :session.package)))
+  (format t "~&Done.~2%")
   (quit-menu))
 
 (defmenu (save :in session

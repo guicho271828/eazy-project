@@ -52,11 +52,15 @@
               `(pushnew ',name (gethash ',in *parent-children-db*)))
        ',name)))
 
+(defvar *future-package*)
+
 @export
 (defun invoke-menu (menu)
+  (setf *future-package* *package*)
   (funcall (menu-task (etypecase menu
                         (symbol (symbol-menu menu))
                         (menu menu))))
+
   ;; (when-let ((r (find-restart 'up)))
   ;;   (invoke-restart r))
   )
