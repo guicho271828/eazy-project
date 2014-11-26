@@ -6,8 +6,9 @@ rewritten and added very much of new features, I renamed it as a new library.
 
 Usage:
 #+BEGIN_SRC 
-(ql:quickload :eazy-project.autoload)
-;; no command is required, all you need is to load the library
+;; (ql:quickload :eazy-project.autoload)
+;;;; no command is required, all you need is to load the library
+;; now this autoload feature is disabled
 
 ;; if you do not want to launch a menu (and only to load the library),
 (ql:quickload :eazy-project)
