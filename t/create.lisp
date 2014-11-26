@@ -31,11 +31,16 @@
    :eazy-project.test
    "t/test-projects/"))
 
+(defun ensure-file-missing (path)
+  (when (probe-file path)
+    (format t "rm -rf ~a" path)
+    (shell-command (format nil "rm -rf ~a" path))))
+
 (test create
   (let ((*config* (copy-seq *config*)))
     (setf (getf *config* :LOCAL-REPOSITORY) *projects*)
     (setf (getf *config* :depends-on) nil)
-    (shell-command (format nil "rm -rf ~a" *projects*))
+    (ensure-file-missing *projects*)
     (finishes
       (simulate-menu-selection
        `((eazy-project::create-project)
@@ -49,7 +54,39 @@
     (is-true
      (asdf:load-system :test.test))
     (is (member "test.test" (asdf:already-loaded-systems) :test #'string=))
-    (shell-command (format nil "rm -rf ~a" *projects*))))
+    (ensure-file-missing *projects*)))
+
+(test initial
+  (let ((*config-path* (merge-pathnames "test-config.lisp" *projects*))
+        (*config* nil))
+    (ensure-directories-exist *config-path*)
+    (ensure-file-missing *config-path*)
+
+    (finishes (load-config))
+    (is (probe-file *config-path*))
+    (is-true *config*)
+
+    (ensure-file-missing *config-path*)))
+
+(test wrong-config
+  (let ((*config-path* (merge-pathnames "test-config.lisp" *projects*))
+        (*config* nil))
+    (ensure-directories-exist *config-path*)
+    (ensure-file-missing *config-path*)
+
+    (with-open-file (*standard-output* *config-path*
+                     :direction :output
+                     :if-does-not-exist :create)
+      (write "random 'C har #\a c ter) s"))
+    (finishes (load-config))
+    (is (probe-file *config-path*))
+    (is (probe-file (make-pathname :type "old" :defaults *config-path*)))
+    (is-true *config*)
+
+    (ensure-file-missing *projects*)))
+
+;; slime-enable-evaluate-in-emacs
+;; (swank:eval-in-emacs '(format "a") t)
 
 
 

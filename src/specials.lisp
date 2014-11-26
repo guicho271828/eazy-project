@@ -29,14 +29,15 @@
                    "ql:*local-project-directories*"))))
    *default-pathname-defaults*))
 
+@export
 (defvar *config-path*
   (asdf:system-relative-pathname
    :eazy-project
    "default-config.lisp"))
 
 @export
-(defun save-config ()
-  (format t "~& [Saving the default config to ~a]~%"
+(defun save-config (&optional override-default)
+  (format t "~%Saving the default config to ~a"
           *config-path*)
   (handler-bind ((error (lambda (c)
                           @ignore c
@@ -46,7 +47,7 @@
                        :direction :output
                        :if-exists :supersede)
 
-      (prin1 (or *config*
+      (prin1 (or (and (not override-default) *config*)
                  (list :local-repository *local-repository*
                        :skeleton-directory *skeleton-directory*
                        :author *author*
@@ -66,33 +67,39 @@
 
 @export
 (defun read-config ()
+  (terpri)
   (block nil
-    (tagbody
-     :start
-       (format t "~& [loading the default config from ~a]~%"
-               *config-path*)
-       (handler-case
-           (with-open-file (s *config-path*
-                              :if-does-not-exist :error)
-             (return-from nil
-               (handler-case
-                   (read s)
-                 (error (c)
-                   @ignore c
-                   (format *error-output* "~&Syntax error found in ~a, replacing with the default settings"
-                           *config-path*)
-                   (let ((old (make-pathname :type "old" :defaults *config-path*)))
-                     (format *error-output* "~&Erroneous file is moved to ~a"
-                             old)
-                     (shell-command (format nil "mv ~a ~a" *config-path* old)))
-                   (go :start)))))
-         (file-error (c)
-           @ignore c
-           (format *error-output* "~&File not found in ~a, writing the default settings"
-                   *config-path*)
-           (save-config)
-           ;; retry
-           (go :start))))))
+    (pprint-logical-block (*standard-output*
+                           nil :per-line-prefix ";; ")
+      (format *standard-output* "~%Loading the default config from ~a" *config-path*)
+      (tagbody
+       :start
+         (restart-bind
+             ((restore-default (lambda ()
+                                 (format *standard-output* "~%Writing the default settings")
+                                 (save-config t)
+                                 (go :start)))
+              (backup (lambda ()
+                        (let ((old (make-pathname :type "old" :defaults *config-path*)))
+                          (format *standard-output* "~%Making a backup of the erroneous file: ~a" old)
+                          (shell-command (format nil "mv ~a ~a" *config-path* old)))
+                        (go :start))))
+           (handler-case
+               (with-open-file (s *config-path*
+                                  :if-does-not-exist :error)
+                 (return-from nil
+                   (handler-case
+                       (let ((read (read s)))
+                         (assert (listp read))
+                         read)
+                     (error (c)
+                       @ignore c
+                       (format *standard-output* "~%Syntax error found in ~a" *config-path*)
+                       (invoke-restart 'backup)))))
+             (file-error (c)
+               @ignore c
+               (format *standard-output* "~%File not found in ~a" *config-path*)
+               (invoke-restart 'restore-default))))))))
 
 @export
 (defun clear-config ()
