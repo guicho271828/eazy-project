@@ -10,7 +10,7 @@
         :eazy-project
         :lisp-n
         :fiveam)
-  (:shadow :!))
+  (:shadow :! :!!))
 (in-package :eazy-project.test)
 
 (def-suite :eazy-project)

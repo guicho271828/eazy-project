@@ -6,6 +6,11 @@
 @export
 (define-symbol-macro ! (launch-menu))
 
+@export
+(define-symbol-macro !!
+    (simulate-menu-selection
+     '((restore))))
+
 
 ;; note that ep-menu should be defined before compiling this file
 

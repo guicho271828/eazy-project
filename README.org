@@ -17,6 +17,11 @@ Usage:
 ;; This is an alias to (launch-menu), using symbol-macrolet.
 !
 
+;; You can RESTORE the previous state, but this is also 
+;; available from !! .
+;; See the next section to know how to save a session.
+!!
+
 ;; Then follow the instruction in the menu that appears in the debugger.
 #+END_SRC
 
