@@ -18,8 +18,12 @@
                   (wrap (lambda () (apply #'invoke-restart r query))))))))
     (funcall fn)))
 
+(defun simulate-menu-selection (list)
+  "Simulate launching a menu and selecting each submenu command.
+LIST is a list of menu selections.
+a menu-selection is a list of (RESTART-NAME . ARGS) .
+ARGS are passed to the restart through, basically,
+ (apply #'invoke-restart (find-restart RESTART-NAME) ARGS) .
 
-
-
-(defun simulate-menu-selection (alist)
-  (wrap (lambda () (launch-menu)) alist))
+This API is not carefully considered and not for public usage. "
+  (wrap (lambda () (launch-menu)) list))
