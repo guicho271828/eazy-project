@@ -8,5 +8,7 @@
         :trivial-shell
         :cl-ppcre
         :cl-emb
-        :optima))
+        :optima)
+  (:export
+   #:simulate-menu-selection))
 

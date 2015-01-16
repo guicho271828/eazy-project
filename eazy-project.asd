@@ -24,6 +24,7 @@
                  (:file :ask)
                  (:file :loop)
                  (:file :menu-definitions)
+                 (:file :simulate)
                  (:module "create"
                           :components
                           ((:file :global)
