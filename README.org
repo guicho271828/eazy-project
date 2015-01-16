@@ -24,7 +24,7 @@ Tested on SBCL-1.2.1 x64 and CCL 1.9 x64.
 
 ** Tutorial: Restore the Yesterday's Coding Environment
 
-RYCE feature saves and restores the set of currently loaded libraries.
+Save and restore the set of currently loaded libraries.
 In the main menu, select the =SESSION= submenu.
 
 Main menu:
