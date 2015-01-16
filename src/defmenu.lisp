@@ -52,7 +52,9 @@
               `(pushnew ',name (gethash ',in *parent-children-db*)))
        ',name)))
 
-(defvar *future-package*)
+(defvar *future-package* nil
+  "FIXME: A hack to set the correct package with restore-session.
+With let and special bindings, it is unwound every time quitting the menu.")
 
 @export
 (defun invoke-menu (menu)

@@ -16,6 +16,9 @@
 (defun sleep-and-check (interval)
   (sleep interval)
   (let ((*query-io* (make-broadcast-stream))) ;; /dev/null
+    ;; this is run in the watcher thread.
+    ;; in order to print to the stdout of the main thread, it should
+    ;; interrupt the main thread.
     (if (bt:interrupt-thread *main-thread* #'save-session)
         (g :session.watch.min)  ;; t: updated
         (update-interval interval))))  ;; nil: increase interval

@@ -11,9 +11,8 @@
           :in ep-main
           :message "Restore the past loaded session")
   (format t "~&[Restoring the session....]~%")
-  (mapc #'asdf:load-system
-        (remove "eazy-project" (g :session.systems)
-                :test #'search))
+  (try-initiate-watch)
+  (mapc #'asdf:load-system (g :session.systems))
   (if (g :session.package)
       (progn
         (setf *future-package* (find-package (g :session.package)))
@@ -75,6 +74,5 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 
 (defun try-initiate-watch ()
   (when (g :session.watch)
-    (asdf:load-system :eazy-project.watch)
     (enable-watch)))
 

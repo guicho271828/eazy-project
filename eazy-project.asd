@@ -13,6 +13,7 @@
                :local-time
                :iterate
                #+sbcl :sb-cltl2
+               :bordeaux-threads
                )
   :components ((:module "src"
                 :components
@@ -30,7 +31,8 @@
                            (:file :actually-create-project)))
                  (:module "restore"
                           :components
-                          ((:file :restore))))
+                          ((:file :restore)
+                           (:file :watch))))
                 :serial t))
   :description "Generate and Manage a Project"
   :in-order-to ((test-op (load-op eazy-project.test))))
