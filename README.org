@@ -69,7 +69,9 @@ will initiate watching, which periodically initiate the SAVE command.
 
 First, open the menu.
 The default data will have already been customized for you.
-It should look something like this (depending on the implementation).
+It should look something like below (depending on the implementation).
+
+Now let's create a new project named "test".
 
 #+BEGIN_SRC 
 (You are now in menu EP-MAIN.)
@@ -103,7 +105,18 @@ Restarts:
  5: [RETRY] Retry SLIME REPL evaluation request.
 #+END_SRC
 
-Select =CREATE-PROJECT=, a new debugger menu would appear. 
+Noitice the several entries that could be added to your new project, e.g., 
+:DEPENDS-ON, :AUTHOR, :EMAIL.
+
++ These default variables can be customized by proceeding to the submenu
+  =EP-MAIN -> SET-GLOBAL=. You will be prompted to enter the value of each
+  field.
++ The default dependency can also be modified by editing the customization
+  file directly. It is saved in =<eazy-project-repo>/default-config.lisp=,
+  which is also available in =eazy-project:*config-path*=.
+
+After adding the global dependency, say TRIVIAL-SHELL,
+then select =CREATE-PROJECT=. A new debugger menu would appear. 
 
 #+BEGIN_SRC 
 (You are now in menu CREATE-PROJECT.)
@@ -124,23 +137,16 @@ Restarts:
 #+END_SRC
 
 In this submenu, you can further modify several /project-local/
-configurations. These configurations are not memorised into the database.
+configurations. These configurations are not saved across sessions.
 
-+ Select =NAME= to enter the name of the new project (if when you attempt
-  to create a project without it, the generator complains and opens an
-  interactive prompt).
-+ You can further add the dependencies.
-  + The project-local dependency (only for this project) can be added by
-    ADD-LOCAL-DEPENDENCY submenu.
-  + The default dependency can be
-    customized in the menu =EP-MAIN -> SET-GLOBAL=.
-  + The default dependency can be modified by editing the customization
-    file directly. It is saved in
-    =<eazy-project-repo>/default-config.lisp=.
++ Select =NAME= to enter the name of the new project, now "test". (if when
+  you attempt to create a project without it, the generator complains and
+  opens an interactive prompt).
++ You can further add the dependencies in ADD-LOCAL-DEPENDENCY submenu.
+  + The project-local dependency is a dependency only for this project.
 
 Finally, select =CREATE=. It will set up the repository, initialize the
-repo with git (by default. It can be disabled).
-
+repo with git (by default. It can be disabled) and load it.
 
 ** TODO Using Programatically
 
@@ -157,9 +163,10 @@ For automated testing, I have =simulate-menu-selection=.
 In the near future, I plans to separate the basis of the interactive
 feature, named =defmenu=, as an independent library.
 
+** TODO Skeletons
+
 Skeleton of the new project is currently not customizable, unlike original
 =cl-project=.
-
 
 ** TODO lisp-n
 

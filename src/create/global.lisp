@@ -2,6 +2,9 @@
 
 ;;;; global configurations
 
+;; values should be stored through update-config-item,
+;; which also handles saving the database.
+
 (defvar *recent-change* nil)
 (defmenu (set-global
           :in ep-main
