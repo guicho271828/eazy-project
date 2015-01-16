@@ -2,35 +2,25 @@
 
 This used to be a fork from cl-project@fukamachi, but since almost everything is
 rewritten and added very much of new features, I renamed it as a new library.
-*I use it for myself.* It is now focused on lots of interactive features.
+It is focused on the interactive features.
+
+Now quicklisp loadable: =(ql:quickload :eazy-project)=.
 
 Usage:
-#+BEGIN_SRC 
-;; (ql:quickload :eazy-project.autoload)
-;;;; no command is required, all you need is to load the library
-;; now this autoload feature is disabled
+#+BEGIN_SRC lisp
+;; Include this statement in your .sbclrc / .ccl-init.lisp
+(ignore-errors   ; this is odd, but in case.
+  (ql:quickload :eazy-project)
+  (use-package :eazy-project))
 
-;; if you do not want to launch a menu (and only to load the library),
-(ql:quickload :eazy-project)
+;; To launch a menu, enter "!" !
+;; This is an alias to (launch-menu), using symbol-macrolet.
+!
 
-;; to launch a menu maually,
-(eazy-project:launch-menu) ; or
-eazy-project:!             ; use this synonym
-
-;;; Then, follow the instruction in the menu that appears in the debugger.
+;; Then follow the instruction in the menu that appears in the debugger.
 #+END_SRC
 
 Tested on SBCL-1.2.1 x64 and CCL 1.9 x64.
-
-** To load w/o automatically launching the menu
-
-=(ql:quickload :eazy-project.impl)= does not launch the menu.
-
-** Installation
-
-To load this library, clone the repo into the quicklisp's local-project
-directory and run
-=(ql:register-local-project)(ql:quickload :eazy-project)=.
 
 ** Tutorial: Restore the Yesterday's Coding Environment
 
@@ -150,4 +140,63 @@ configurations. These configurations are not memorised into the database.
 
 Finally, select =CREATE=. It will set up the repository, initialize the
 repo with git (by default. It can be disabled).
+
+
+** TODO Using Programatically
+
+Although it is possible, the interface is not well structured.
+For automated testing, I have =simulate-menu-selection=.
+
+#+BEGIN_SRC lisp
+(simulate-menu-selection
+  `((eazy-project::create-project)
+    (:name "test")
+    (eazy-project::create)))
+#+END_SRC
+
+In the near future, I plans to separate the basis of the interactive
+feature, named =defmenu=, as an independent library.
+
+Skeleton of the new project is currently not customizable, unlike original
+=cl-project=.
+
+
+** TODO lisp-n
+
+Another back-end I plan to separate from eazy-project is called =lisp-n=,
+which is a simple wrapper layer for defining a namespace.
+
+We see many systems which implements their own =defXXX=,
+and each time they use symbol-plist or a hashtable.
+=lisp-n= is a layer which abstracts the concept of "namespace as hashtable".
+For example, =(lisp-n:define-namespace X &optional type)= automatically defines
+
++ symbol-x and (setf symbol-x)
++ unbound-x
++ x-boundp
+
+and add =ftype= proclamation to each functions.
+
+Common lisp is lisp-2, which means it has a different namespaces for the
+value and the function. With lisp-n, you can define arbitrary additional
+namespaces and its accessors as well.
+
+The idea is simple.  Common lisp has `symbol-value' and `symbol-function',
+so I added `symbol-anything-you-like'.  Current implementation is
+built upon a hashtable, but it also modifies `cl:symbol-plist', for the
+debugging purpose. However, this symbol-plist feature is disabled when
+=(< 2 S)= where =(declare (optimize (speed S)))=.
+
+This is not yet separated because I further want to implement =nlet=, which
+abstracts =let,macrolet,flet=. The idea is:
+
+#+BEGIN_SRC lisp
+  (nlet (((function sub) (arg) ...)       ; converted to flet
+         ((function* rec) (arg) ...)      ; converted to labels
+         ((macro m) (arg) ...)            ; converted to macrolet
+         ((X thing) ...) ; converted to *lexical* binding of THING in namespace X
+         (var       ...) ; converted to let
+         ((symbol-macro var) ...))         ; converted to symbol-macrolet
+    body...)
+#+END_SRC
 
