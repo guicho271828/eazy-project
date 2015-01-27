@@ -23,7 +23,7 @@ debugging purpose. I assume there won't be so many additional namespaces.
 
 (defvar *namespaces* nil)
 
-(defun speed-requird ()
+(defun speed-required ()
   (< 2
      (second
       (assoc 'speed (declaration-information 'optimize)))))
@@ -56,11 +56,11 @@ debugging purpose. I assume there won't be so many additional namespaces.
          (nth-value 1 (gethash symbol ,hash)))
        (declaim (ftype (function (,expected-type symbol) ,expected-type) (setf ,accessor)))
        (defun (setf ,accessor) (new-value symbol)
-         ,@(if (speed-requird)
+         ,@(if (speed-required)
                nil
                `((setf (get symbol 'name) new-value)))
          (setf (gethash symbol ,hash) new-value))
-       ,@(when (speed-requird)
+       ,@(when (speed-required)
                `((declare (inline ,accessor))
                  (declare (inline (setf ,accessor)))))
        (pushnew ',name *namespaces*))))
