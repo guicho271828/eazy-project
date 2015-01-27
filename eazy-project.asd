@@ -12,7 +12,7 @@
                :cl-syntax-annot
                :local-time
                :iterate
-               #+sbcl :sb-cltl2
+               :introspect-environment
                :bordeaux-threads
                )
   :components ((:module "src"

@@ -15,7 +15,7 @@ debugging purpose. I assume there won't be so many additional namespaces.
 |#
 
 (defpackage :lisp-n
-  (:use :cl :alexandria)
+  (:use :cl :alexandria :introspect-environment)
   (:export :define-namespace
            :clear-namespace))
 
@@ -26,14 +26,7 @@ debugging purpose. I assume there won't be so many additional namespaces.
 (defun speed-requird ()
   (< 2
      (second
-      (assoc 'speed
-             (#+sbcl sb-cltl2:declaration-information
-                     #+openmcl ccl:declaration-information
-                     #+cmu ext:declaration-information
-                     #+allegro sys:declaration-information
-                     #+ecl si:declaration-information
-                     #+abcl lisp:declaration-information
-                     'optimize)))))
+      (assoc 'speed (declaration-information 'optimize)))))
 
 (defmacro define-namespace (name &optional (expected-type t))
   (when (member name '(function
