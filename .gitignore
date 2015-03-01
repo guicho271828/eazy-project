@@ -9,3 +9,6 @@ t/sample*
 
 /default-config.lisp
 /default-config.old
+/err.log
+/out.log
+*TAGS
