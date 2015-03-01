@@ -27,6 +27,8 @@ install:
     else
       curl https://raw.githubusercontent.com/luismbo/cl-travis/master/install.sh | sh;
     fi     
+  # clone lispn as of now (2015/3/1). this will be removed when the next quicklisp release contains lispn
+  - git clone --depth=1 https://github.com/guicho271828/lisp-namespace.git ~/lisp/lisp-namespace
 
 # this bit is just testing that travis correctly sets up ASDF to find
 # systems placed somewhere within ~/lisp. You can remove this section
@@ -35,8 +37,6 @@ before_script:
   - echo "(defsystem :dummy-cl-travis-system)" > ~/lisp/dummy-cl-travis-system.asd
 
 script:
-  # clone lispn as of now (2015/3/1). this will be removed when the next quicklisp release contains lispn
-  - git clone git@github.com:guicho271828/lisp-namespace.git ~/lisp/lisp-namespace
   - cl --load testscr.lisp &> out
   - cat out
   # 'Fail: 0' cause the yaml parser error, so I just used the wildecard
