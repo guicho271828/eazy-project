@@ -1,5 +1,7 @@
 * EAZY-Project - Interactive Project Generator & Manager
 
+[[https://travis-ci.org/guicho271828/eazy-project][https://travis-ci.org/guicho271828/eazy-project.svg?branch=master]]
+
 This used to be a fork from cl-project@fukamachi, but since almost everything is
 rewritten and added very much of new features, I renamed it as a new library.
 It is focused on the interactive features.
