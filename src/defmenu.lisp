@@ -21,7 +21,7 @@
         :type list
         :read-only t))
 
-(define-namespace menu t)
+(lispn:define-namespace menu t)
 
 @export
 (defvar *menu-arguments* nil

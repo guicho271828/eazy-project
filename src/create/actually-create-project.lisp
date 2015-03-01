@@ -1,6 +1,6 @@
 (in-package :eazy-project)
 
-(define-namespace processor)
+(lispn:define-namespace processor)
 
 (defvar *done* nil)
 

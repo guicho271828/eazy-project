@@ -14,11 +14,10 @@
                :iterate
                :introspect-environment
                :bordeaux-threads
-               )
+               :lisp-namespace)
   :components ((:module "src"
                 :components
-                ((:file :namespace)
-                 (:file :package)
+                ((:file :package)
                  (:file :specials)
                  (:file :defmenu)
                  (:file :ask)

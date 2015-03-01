@@ -8,7 +8,6 @@
   (:use :cl
         :trivial-shell
         :eazy-project
-        :lisp-n
         :fiveam)
   (:shadow :! :!!))
 (in-package :eazy-project.test)
