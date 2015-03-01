@@ -35,4 +35,5 @@ before_script:
   - echo "(defsystem :dummy-cl-travis-system)" > ~/lisp/dummy-cl-travis-system.asd
 
 script:
-  - cl --load testscr.lisp | grep 'Fail\: 0'
+  # 'Fail: 0' cause the yaml parser error, so I just used the wildecard
+  - cl --load testscr.lisp | grep 'Fail. 0'
