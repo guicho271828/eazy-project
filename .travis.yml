@@ -35,8 +35,10 @@ before_script:
   - echo "(defsystem :dummy-cl-travis-system)" > ~/lisp/dummy-cl-travis-system.asd
 
 script:
-  # 'Fail: 0' cause the yaml parser error, so I just used the wildecard
+  # clone lispn as of now (2015/3/1). this will be removed when the next quicklisp release contains lispn
+  - git clone git@github.com:guicho271828/lisp-namespace.git ~/lisp/lisp-namespace
   - cl --load testscr.lisp &> out
   - cat out
+  # 'Fail: 0' cause the yaml parser error, so I just used the wildecard
   - grep 'Fail. 0' out
  
