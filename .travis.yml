@@ -35,6 +35,4 @@ before_script:
   - echo "(defsystem :dummy-cl-travis-system)" > ~/lisp/dummy-cl-travis-system.asd
 
 script:
-  - cl --load testscr.lisp &> out
-  - cat out
-  - grep '/Fail: 0/' out
+  - cl --load testscr.lisp | grep '/Fail: 0/'
