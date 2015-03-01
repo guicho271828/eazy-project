@@ -17,6 +17,15 @@ matrix:
   allow_failures:
     # CIM not available for CMUCL
     - env: LISP=cmucl
+    # cffi fails
+    - env: LISP=abcl
+    - env: LISP=allegro
+    - env: LISP=clisp
+    - env: LISP=cmucl
+    - env: LISP=ecl
+    - env: LISP=sbcl32
+    - env: LISP=ccl32
+    - env: LISP=clisp32
 
 # either use a local install.sh script or install it via curl. Feel
 # free to simplify this section in your own .travis.yml file.
