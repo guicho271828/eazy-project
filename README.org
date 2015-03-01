@@ -173,42 +173,4 @@ feature, named =defmenu=, as an independent library.
 Skeleton of the new project is currently not customizable, unlike original
 =cl-project=.
 
-** TODO lisp-n
-
-Another back-end I plan to separate from eazy-project is called =lisp-n=,
-which is a simple wrapper layer for defining a namespace.
-
-We see many systems which implements their own =defXXX=,
-and each time they use symbol-plist or a hashtable.
-=lisp-n= is a layer which abstracts the concept of "namespace as hashtable".
-For example, =(lisp-n:define-namespace X &optional type)= automatically defines
-
-+ symbol-x and (setf symbol-x)
-+ unbound-x
-+ x-boundp
-
-and add =ftype= proclamation to each functions.
-
-Common lisp is lisp-2, which means it has a different namespaces for the
-value and the function. With lisp-n, you can define arbitrary additional
-namespaces and its accessors as well.
-
-The idea is simple.  Common lisp has `symbol-value' and `symbol-function',
-so I added `symbol-anything-you-like'.  Current implementation is
-built upon a hashtable, but it also modifies `cl:symbol-plist', for the
-debugging purpose. However, this symbol-plist feature is disabled when
-=(< 2 S)= where =(declare (optimize (speed S)))=.
-
-This is not yet separated because I further want to implement =nlet=, which
-abstracts =let,macrolet,flet=. The idea is:
-
-#+BEGIN_SRC lisp
-  (nlet (((function sub) (arg) ...)       ; converted to flet
-         ((function* rec) (arg) ...)      ; converted to labels
-         ((macro m) (arg) ...)            ; converted to macrolet
-         ((X thing) ...) ; converted to *lexical* binding of THING in namespace X
-         (var       ...) ; converted to let
-         ((symbol-macro var) ...))         ; converted to symbol-macrolet
-    body...)
-#+END_SRC
 
