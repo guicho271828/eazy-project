@@ -36,4 +36,7 @@ before_script:
 
 script:
   # 'Fail: 0' cause the yaml parser error, so I just used the wildecard
-  - cl --load testscr.lisp | grep 'Fail. 0'
+  - cl --load testscr.lisp &> out
+  - cat out
+  - grep 'Fail. 0' out
+ 
