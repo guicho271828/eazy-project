@@ -56,7 +56,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
   (up))
 
 
-(defmenu (testing-library :in set-global "Change the default testing library")
+(defmenu (testing-library :in set-global :message "Change the default testing library")
   (q "Enter a name of the test library you'd like to use.
 The input string is converted to a keyword.
   Example:   oSiCaT   -->  finally appears as :OSICAT")
