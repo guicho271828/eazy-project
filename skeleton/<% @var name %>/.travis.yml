@@ -41,4 +41,4 @@ before_script:
 
 
 script:
-  - cl --eval '(progn (ql:quickload :<% @var test %>)(load "testscr.lisp"))'
+  - ./run-test.sh
