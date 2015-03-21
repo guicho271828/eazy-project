@@ -24,10 +24,10 @@
                  (:file :loop)
                  (:file :menu-definitions)
                  (:file :simulate)
+                 (:file :global)
                  (:module "create"
                           :components
-                          ((:file :global)
-                           (:file :project-local)
+                          ((:file :project-local)
                            (:file :actually-create-project)))
                  (:module "restore"
                           :components

@@ -12,7 +12,7 @@ Current local configuration:
        *config* *project-config* *project-config*))
 
 (macrolet ((set-x (what &optional control)
-             `(defmenu (,what :in create-project)
+             `(defmenu (,(intern (symbol-name what)) :in create-project)
                 ,(if control
                      `(q ,control)
                      `(q "Enter the ~a information." ,what))
@@ -22,7 +22,12 @@ Current local configuration:
                 (up))))
   (set-x :name
          "Enter the new project name, this affects the name of the
-subfolder, asdf system name and the package name."))
+subfolder, asdf system name and the package name.")
+  (set-x :description
+         "Enter the short description of this library. Description
+information is required for quicklisp submission, and missing this
+information annoyes Xach because he has to ask you to add that information
+each time."))
 
 (defmenu (add-local-dependency :in create-project)
   (q "Enter a name of a library. The input string is converted to a keyword.

@@ -51,7 +51,12 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
          (g :depends-on))))
   (up))
 
-(defmenu (test :in set-global)
+(defmenu (clear-dependency :in set-global :message "Clear the default dependency")
+  (update-config-item :depends-on nil)
+  (up))
+
+
+(defmenu (testing-library :in set-global :message "Change the default testing library")
   (q "Enter a name of the test library you'd like to use.
 The input string is converted to a keyword.
   Example:   oSiCaT   -->  finally appears as :OSICAT")

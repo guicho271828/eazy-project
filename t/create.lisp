@@ -30,16 +30,17 @@
       (finishes
        (simulate-menu-selection
         `((eazy-project::create-project)
-          (:name "test")
+          (eazy-project::name "eptest")
+          (eazy-project::description "this is a test project")
           (eazy-project::create))))
-      (is (probe-file (merge-pathnames "test/test.asd" *projects*)))
-      (is (member "test" (asdf:already-loaded-systems) :test #'string=))
+      (is (probe-file (merge-pathnames "eptest/eptest.asd" *projects*)))
+      (is (member "eptest" (asdf:already-loaded-systems) :test #'string=))
       (finishes
        (load
-        (merge-pathnames "test/test.test.asd" *projects*)))
+        (merge-pathnames "eptest/eptest.test.asd" *projects*)))
       (is-true
-       (asdf:load-system :test.test))
-      (is (member "test.test" (asdf:already-loaded-systems) :test #'string=)))))
+       (asdf:load-system :eptest.test))
+      (is (member "eptest.test" (asdf:already-loaded-systems) :test #'string=)))))
 
 (test initial
   (let ((*config-path* (merge-pathnames "test-config.lisp" *projects*))

@@ -59,6 +59,11 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
                        (find-package "KEYWORD")))
          (g :session.systems))))
   (up))
+(defmenu (reset-default-system :in session)
+  (print-config-update-direction :session.systems)
+  (qif (str)
+       (update-config-item :session.systems nil))
+  (up))
 
 (defvar *main-thread*)
 (defmenu (toggle-watch
