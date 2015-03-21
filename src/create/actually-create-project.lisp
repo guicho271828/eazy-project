@@ -42,7 +42,7 @@ Actual Parameters:
       ;; git
       (when (l :git)
         (princ (shell-command
-                (format nil "cd ~a; git init; git add *"
+                (format nil "cd ~a; git init; git add *; git commit -m \"Auto initial commit by eazy-project\""
                         *default-pathname-defaults*))))
       ;; autoload asd
       (load (merge-pathnames
