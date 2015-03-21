@@ -46,8 +46,5 @@ before_script:
   - echo "(defsystem :dummy-cl-travis-system)" > ~/lisp/dummy-cl-travis-system.asd
 
 script:
-  - cl --load testscr.lisp &> out
-  - cat out
-  # 'Fail: 0' cause the yaml parser error, so I just used the wildecard
-  - grep 'Fail. 0' out
+  - cl --eval '(progn (ql:quickload :fiveam)(load "testscr.lisp"))'
  
