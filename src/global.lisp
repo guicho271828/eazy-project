@@ -60,10 +60,19 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
   (q "Enter a name of the test library you'd like to use.
 The input string is converted to a keyword.
   Example:   oSiCaT   -->  finally appears as :OSICAT")
-  (print-config-update-direction :depends-on)
+  (print-config-update-direction :test)
   (qif (str)
        (update-config-item
         :test (intern (string-upcase str)
                       (find-package "KEYWORD"))))
   (up))
 
+(defmenu (readme-extension :in set-global :message "Change the default README format")
+  (q "supports 'org' or 'md'")
+  (print-config-update-direction :readme-extension)
+  (qif (str)
+       (ematch str
+         ((or "org" "md")
+          (update-config-item :readme-extension str))
+         (_ (q "'~a' is not a supported README extension, aborting."))))
+  (up))

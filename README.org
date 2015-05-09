@@ -10,21 +10,19 @@ Now quicklisp loadable: =(ql:quickload :eazy-project)=.
 
 Usage:
 #+BEGIN_SRC lisp
-;; Include this statement in your .sbclrc / .ccl-init.lisp
+;; Add this statement in your .sbclrc / .ccl-init.lisp
 (ignore-errors   ; this is odd, but in case.
   (ql:quickload :eazy-project)
   (use-package :eazy-project))
 
-;; To launch a menu, enter "!" !
-;; This is an alias to (launch-menu), using symbol-macrolet.
+;; To launch a menu, enter "!".
+;; This is a symbol-macrolet alias to (eazy-project:launch-menu).
 !
 
-;; You can RESTORE the previous state, but this is also 
-;; available from !! .
+;; You can RESTORE the previous state simply by "!!" .
 ;; See the next section to know how to save a session.
 !!
 
-;; Then follow the instruction in the menu that appears in the debugger.
 #+END_SRC
 
 Tested on SBCL-1.2.1 x64 and CCL 1.9 x64.
@@ -33,12 +31,12 @@ Tested on SBCL-1.2.1 x64 and CCL 1.9 x64.
 
 Save and restore the set of currently loaded libraries.
 In the main menu, select the =SESSION= submenu.
+(The menu items below might not reflect the latest version)
 
 Main menu:
 #+BEGIN_SRC 
 (You are now in menu EP-MAIN.)
 What to do next?
-...
 ...
 ...
    [Condition of type EAZY-PROJECT:ASK]
@@ -68,17 +66,16 @@ Restarts:
 #+END_SRC
 
 Then, SAVE or RESTORE the current session. SAVE will store the current
-=*package*= and =asdf:already-loaded-systems= to a database for the later
-restoration. RESTORE will restore the saved session. Finally, TOGGLE-WATCH
-will initiate watching, which periodically initiate the SAVE command.
+=*package*= and =asdf:already-loaded-systems= to a persistent database.
+RESTORE will restore the saved session. Finally, TOGGLE-WATCH
+will initiate watching in a background thread
+which periodically check and save the session.
 
-** Tutorial: Generate a project
+** Tutorial: Creating a project using templates
 
+Assume you are creating a new project named "myproj".
 First, open the menu.
-The default data will have already been customized for you.
 It should look something like below (depending on the implementation).
-
-Now let's create a new project named "test".
 
 #+BEGIN_SRC 
 (You are now in menu EP-MAIN.)
@@ -100,7 +97,6 @@ Here are current default configs:
 :DELIMITER           = "."
 :LICENSE             = "LLGPL"
 :TEST                = :FIVEAM
-:DEPENDS-ON          = (:ALEXANDRIA :OPTIMA :ITERATE)
    [Condition of type EAZY-PROJECT:ASK]
 
 Restarts:
@@ -113,16 +109,19 @@ Restarts:
 #+END_SRC
 
 Noitice the several entries that could be added to your new project, e.g., 
-:DEPENDS-ON, :AUTHOR, :EMAIL.
+:AUTHOR is set to "Masataro Asai", and :EMAIL is "guicho2.71828@gmail.com".
+Most of these entries are already customized for you.
 
-+ These default variables can be customized by proceeding to the submenu
-  =EP-MAIN -> SET-GLOBAL=. You will be prompted to enter the value of each
-  field.
-+ The default dependency can also be modified by editing the customization
-  file directly. It is saved in =<eazy-project-repo>/default-config.lisp=,
-  which is also available in =eazy-project:*config-path*=.
+These default variables can be customized by proceeding to the submenu
+=EP-MAIN -> SET-GLOBAL=. The similar interactive interface would show
+up. Follow the instructions there.
 
-After adding the global dependency, say TRIVIAL-SHELL,
+# + The default dependency can also be modified by editing the customization
+#   file directly. It is saved in =<eazy-project-repo>/default-config.lisp=,
+#   which is also available in =eazy-project:*config-path*=.
+
+If you are satisfied with these global configurations,
+# After adding the global dependency, say TRIVIAL-SHELL,
 then select =CREATE-PROJECT=. A new debugger menu would appear. 
 
 #+BEGIN_SRC 
@@ -144,9 +143,10 @@ Restarts:
 #+END_SRC
 
 In this submenu, you can further modify several /project-local/
-configurations. These configurations are not saved across sessions.
+configurations. Those configurations are cleared each time you enter
+=CREATE-PROJECT= submenu.
 
-+ Select =NAME= to enter the name of the new project, now "test". (if when
++ Select =NAME= to enter the name of the new project, now "myproj". (if when
   you attempt to create a project without it, the generator complains and
   opens an interactive prompt).
 + You can further add the dependencies in ADD-LOCAL-DEPENDENCY submenu.
@@ -157,8 +157,10 @@ repo with git (by default. It can be disabled) and load it.
 
 ** TODO Using Programatically
 
-Although it is possible, the interface is not well structured.
-For automated testing, I have =simulate-menu-selection=.
+Although it is possible, the interface is not documented not structured
+very well.
+For automated testing, I'm using =simulate-menu-selection=, but please
+don't use it. For such a purpose, use =cl-project=.
 
 #+BEGIN_SRC lisp
 (simulate-menu-selection
@@ -167,8 +169,8 @@ For automated testing, I have =simulate-menu-selection=.
     (eazy-project::create)))
 #+END_SRC
 
-In the near future, I plans to separate the basis of the interactive
-feature, named =defmenu=, as an independent library.
+I plan to separate the interactive interface as an independent library in
+the near future.
 
 ** TODO Skeletons
 
