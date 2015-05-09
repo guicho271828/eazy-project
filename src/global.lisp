@@ -60,7 +60,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
   (q "Enter a name of the test library you'd like to use.
 The input string is converted to a keyword.
   Example:   oSiCaT   -->  finally appears as :OSICAT")
-  (print-config-update-direction :depends-on)
+  (print-config-update-direction :test)
   (qif (str)
        (update-config-item
         :test (intern (string-upcase str)
