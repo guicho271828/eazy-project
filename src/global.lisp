@@ -67,3 +67,12 @@ The input string is converted to a keyword.
                       (find-package "KEYWORD"))))
   (up))
 
+(defmenu (readme-extension :in set-global :message "Change the default README format")
+  (q "supports 'org' or 'md'")
+  (print-config-update-direction :readme-extension)
+  (qif (str)
+       (ematch str
+         ((or "org" "md")
+          (update-config-item :readme-extension str))
+         (_ (q "'~a' is not a supported README extension, aborting."))))
+  (up))
