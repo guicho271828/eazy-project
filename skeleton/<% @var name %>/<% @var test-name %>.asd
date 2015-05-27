@@ -12,6 +12,8 @@
 
 (defsystem <% @var test-name %>
   :author "<% @var author %>"
+  :mailto "<% @var email %>"
+  :description "Test system of <% @var name %>"
   :license "<% @var license %>"
   :depends-on (:<% @var name %>
                :<% @var test %>)

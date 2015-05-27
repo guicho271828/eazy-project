@@ -1,7 +1,9 @@
 
 (defsystem eazy-project.test
   :author "Masataro Asai"
+  :mailto "guicho2.71828@gmail.com"
   :license "LLGPL"
+  :description "Test library of eazy-project.test"
   :depends-on (:eazy-project :fiveam)
   :components ((:module "t"
                 :components
