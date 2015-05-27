@@ -2,6 +2,7 @@
 (defsystem eazy-project.test
   :author "Masataro Asai"
   :license "LLGPL"
+  :description "Test library of eazy-project.test"
   :depends-on (:eazy-project :fiveam)
   :components ((:module "t"
                 :components
