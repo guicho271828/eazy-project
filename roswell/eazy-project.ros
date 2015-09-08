@@ -1,0 +1,11 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(ql:quickload :eazy-project)
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  #+sbcl
+  (sb-ext:enable-debugger)
+  (eazy-project:launch-menu))
