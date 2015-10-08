@@ -32,7 +32,7 @@ Actual Parameters:
       (unwind-protect-case ()
           (let ((*print-case* :downcase))
             (mapc #'process-file
-                  (remove-if-not #'not-includefile-p
+                  (remove-if-not #'includes-p
                                  (split "
 "
                                         (shell-command
@@ -54,13 +54,17 @@ Actual Parameters:
              (format nil "~a.asd" (l :name))))
       (asdf:load-system (l :name)))))
 
-(defun not-includefile-p (path)
+(defun includes-p (path)
   (declare (ignore path))
-  (not (string=
-        "includes"
-        (lastcar
-         (pathname-directory
-          *default-pathname-defaults*)))))
+  (or (string=
+       "includes"
+       (lastcar
+        (pathname-directory
+         *default-pathname-defaults*)))
+      (string=
+       "includes"
+       (pathname-name
+         *default-pathname-defaults*))))
 
 (defun process-file (file)
   (handler-case
