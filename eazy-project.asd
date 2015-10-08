@@ -4,11 +4,9 @@
   :author "Masataro Asai"
   :mailto "guicho2.71828@gmail.com"
   :license "LLGPL"
-  :depends-on (:trivial-shell
-               :asdf
+  :depends-on (:cl-ppcre
                :optima
                :cl-emb
-               :osicat
                :cl-syntax
                :cl-syntax-annot
                :local-time
@@ -19,6 +17,7 @@
   :components ((:module "src"
                 :components
                 ((:file :package)
+                 (:file :util)
                  (:file :specials)
                  (:file :defmenu)
                  (:file :ask)

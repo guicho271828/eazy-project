@@ -25,17 +25,18 @@ Actual Parameters:
 ~{~20@<~s~> = ~s~%~}" *project-config*)
 
     (let ((*default-pathname-defaults*
-           (pathname-as-directory 
-            (merge-pathnames
-             (l :name)
-             (l :local-repository)))))
+           (uiop:ensure-directory-pathname
+            (merge-pathnames (l :name) (l :local-repository)))))
+      (ensure-directories-exist *default-pathname-defaults*)
       ;; creation
-      (unwind-protect-case ()  
+      (unwind-protect-case ()
           (let ((*print-case* :downcase))
-            (walk-directory 
-             (l :skeleton-directory)
-             #'process-file
-             :test #'not-includefile-p))
+            (mapc #'process-file
+                  (remove-if-not #'not-includefile-p
+                                 (split "
+"
+                                        (shell-command
+                                         (format nil "find ~a" (l :skeleton-directory)))))))
         (:abort (shell-command
                  (format nil "rm -rf ~a"
                          *default-pathname-defaults*))))
@@ -45,6 +46,10 @@ Actual Parameters:
                 (format nil "cd ~a; git init; git add *; git commit -m \"Auto initial commit by eazy-project\""
                         *default-pathname-defaults*))))
       ;; autoload asd
+      (or (probe-file
+           (merge-pathnames
+            (format nil "~a.asd" (l :name))))
+          (error "failed to create a new repo!"))
       (load (merge-pathnames
              (format nil "~a.asd" (l :name))))
       (asdf:load-system (l :name)))))
@@ -53,43 +58,49 @@ Actual Parameters:
   (declare (ignore path))
   (not (string=
         "includes"
-        (pathname-name
-         (pathname-as-file 
-          (pathname-directory-pathname
-           *default-pathname-defaults*))))))
+        (lastcar
+         (pathname-directory
+          *default-pathname-defaults*)))))
 
 (defun process-file (file)
-  (let* ((tpl-path (merge-pathnames file))
-         (tpl-name (namestring tpl-path)))
-    ;; might be confusing, but cl-emb treat pathnames and strings
-    ;; differently
-    (register-emb tpl-name tpl-name)
-    (let* ((processed-filename
-            (execute-emb ; convert the filename
-             tpl-name :env *project-config*))
-           ;; e.g. /tmp/skeleton/<% @var x %>/<% @var y %>.lisp
-           ;; -> . /tmp/skeleton/x/y.lisp
-           ;; next, get the relative pathname
-           (relative-from-skeleton
-            (enough-namestring
-             processed-filename
-             (pathname-as-directory 
-              (l :skeleton-directory))))
-           ;; this should be x/y.lisp
-           ;; then merge to the target dirname
-           ;; e.g. ~/myrepos/ + x/y.lisp
-           (final-pathname
-            (merge-pathnames 
-             relative-from-skeleton
-             (l :local-repository))))
-      (ensure-directories-exist final-pathname :verbose t)
-      ;; now convert the contents
-      (let ((str (execute-emb tpl-path :env *project-config*)))
-        (with-open-file (s final-pathname
-                           :direction :output
-                           :if-exists :supersede
-                           :if-does-not-exist :create)
-          (princ str s))))))
+  (handler-case
+      (let* ((tpl-path (merge-pathnames file))
+             (tpl-name (namestring tpl-path)))
+        ;; might be confusing, but cl-emb treat pathnames and strings
+        ;; differently
+        (register-emb tpl-name tpl-name)
+        (let* ((*default-pathname-defaults* tpl-path)
+               (processed-filename
+                (execute-emb ; convert the filename
+                 tpl-name :env *project-config*))
+               ;; e.g. /tmp/skeleton/<% @var x %>/<% @var y %>.lisp
+               ;; -> . /tmp/skeleton/x/y.lisp
+               ;; next, get the relative pathname
+               (relative-from-skeleton
+                (enough-namestring
+                 processed-filename
+                 (uiop:ensure-directory-pathname 
+                  (l :skeleton-directory))))
+               ;; this should be x/y.lisp
+               ;; then merge to the target dirname
+               ;; e.g. ~/myrepos/ + x/y.lisp
+               (final-pathname
+                (merge-pathnames 
+                 relative-from-skeleton
+                 (l :local-repository))))
+          (ensure-directories-exist final-pathname :verbose t)
+          ;; now convert the contents
+          (let ((str (execute-emb tpl-path :env *project-config*)))
+            (with-open-file (s final-pathname
+                               :direction :output
+                               :if-exists :supersede
+                               :if-does-not-exist :create)
+              (princ str s)))))
+    (ERROR ()
+      ;; on sbcl, stream-error
+      ;; on ccl, file-error
+      ;; failed to open a file; e.g. a file is a directory
+      (warn "Failed to process ~a" file))))
 
 
 

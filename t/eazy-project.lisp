@@ -6,11 +6,15 @@
 (in-package :cl-user)
 (defpackage eazy-project.test
   (:use :cl
-        :trivial-shell
+        :ppcre
         :eazy-project
         :fiveam)
   (:shadow :! :!!))
 (in-package :eazy-project.test)
+
+(defun shell-command (command)
+  (uiop:run-program (split "\\s-*" command)
+                    :ignore-error-status t))
 
 (def-suite :eazy-project)
 (in-suite :eazy-project)
