@@ -1,6 +1,10 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
 
-(in-package :cl-user)
-
+(ql:quickload :fiveam)
 (defun test (sys)
   (handler-case
       (progn
@@ -11,8 +15,12 @@
       (describe c)
       (uiop:quit 2))))
 
-(uiop:quit (if (every #'fiveam::TEST-PASSED-P
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (uiop:quit (if (every #'fiveam::TEST-PASSED-P
                       (test :eazy-project))
-               0 1))
+                 0 1)))
+
+
 
 
