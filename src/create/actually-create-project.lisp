@@ -32,11 +32,11 @@ Actual Parameters:
       (unwind-protect-case ()
           (let ((*print-case* :downcase))
             (mapc #'process-file
-                  (remove-if-not #'includes-p
-                                 (split "
+                  (remove-if #'includes-p
+                             (split "
 "
-                                        (shell-command
-                                         (format nil "find ~a" (l :skeleton-directory)))))))
+                                    (shell-command
+                                     (format nil "find ~a" (l :skeleton-directory)))))))
         (:abort (shell-command
                  (format nil "rm -rf ~a"
                          *default-pathname-defaults*))))
@@ -100,9 +100,10 @@ Actual Parameters:
                                :if-exists :supersede
                                :if-does-not-exist :create)
               (princ str s)))))
-    (ERROR ()
-      ;; on sbcl, stream-error
-      ;; on ccl, file-error
+    (stream-error ()
+      ;; failed to open a file; e.g. a file is a directory
+      (warn "Failed to process ~a" file))
+    (file-error ()
       ;; failed to open a file; e.g. a file is a directory
       (warn "Failed to process ~a" file))))
 
