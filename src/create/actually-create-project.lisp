@@ -55,16 +55,13 @@ Actual Parameters:
       (asdf:load-system (l :name)))))
 
 (defun includes-p (path)
-  (declare (ignore path))
   (or (string=
        "includes"
        (lastcar
-        (pathname-directory
-         *default-pathname-defaults*)))
+        (pathname-directory path)))
       (string=
        "includes"
-       (pathname-name
-         *default-pathname-defaults*))))
+       (pathname-name path))))
 
 (defun process-file (file)
   (handler-case
