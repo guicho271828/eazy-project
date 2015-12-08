@@ -1,4 +1,6 @@
+
 (in-package :eazy-project)
 
 (try-initiate-watch)
-(launch-menu)
+
+(import '(!) (find-package :cl-user))
