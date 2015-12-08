@@ -32,6 +32,7 @@ Current configuration:
   (set-x :local-repository
          "Enter the location for a new project subdirectory.")
   (set-x :author)
+  (set-x :license "Choose the default license")
   (set-x :email))
 
 (defmenu (git :in set-global :message "Toggle git initialization")
