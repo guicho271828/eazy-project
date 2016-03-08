@@ -30,4 +30,4 @@
                 :components
                 ((:file "package"))))
   :description "<% @var description %>"
-  :in-order-to ((test-op (load-op :<% @var test-name %>))))
+  :in-order-to ((test-op (test-op :<% @var test-name %>))))

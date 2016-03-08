@@ -20,7 +20,7 @@
   :components ((:module "<% @var test-dir %>"
                 :components
                 ((:file "package"))))
-  :perform (load-op :after (op c) <%= (cl-emb:execute-emb
+  :perform (test-op :after (op c) <%= (cl-emb:execute-emb
      (merge-pathnames
       (getf env :test-template)
       (merge-pathnames "includes/"))
