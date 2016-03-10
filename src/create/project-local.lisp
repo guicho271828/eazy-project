@@ -29,7 +29,9 @@ information is required for quicklisp submission, and missing this
 information annoyes Xach because he has to ask you to add that information
 each time.")
   (set-x :homepage
-         "Enter the homepage URL of this library."))
+         "Enter the homepage URL of this library.")
+  (set-x :bug-tracker
+         "Enter URL under which a user can open bugs for this library."))
 
 (defmenu (add-local-dependency :in create-project)
   (q "Enter a name of a library. The input string is converted to a keyword.

@@ -25,6 +25,7 @@
   :author "<% @var author %>"
   :mailto "<% @var email %>"
   :homepage "<% @var homepage %>"
+  :bug-tracker "<% @var bug-tacker %>"
   :license "<% @var license %>"
   :depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>)
   :components ((:module "<% @var source-dir %>"
