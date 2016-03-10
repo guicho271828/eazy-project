@@ -23,9 +23,9 @@
 (defsystem <% @var name %>
   :version "0.1"
   :author "<% @var author %>"
-  :mailto "<% @var email %>"
-  :homepage "<% @var homepage %>"
-  :bug-tracker "<% @var bug-tacker %>"
+  :mailto "<% @var email %>"<% @if homepage %>
+  :homepage "<% @var homepage %>"<% @endif %><% @if bug-tracker %>
+  :bug-tracker "<% @var bug-tacker %>"<% @endif %>
   :license "<% @var license %>"
   :depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>)
   :components ((:module "<% @var source-dir %>"
