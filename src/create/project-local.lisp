@@ -27,7 +27,9 @@ subfolder, asdf system name and the package name.")
          "Enter the short description of this library. Description
 information is required for quicklisp submission, and missing this
 information annoyes Xach because he has to ask you to add that information
-each time."))
+each time.")
+  (set-x :homepage
+         "Enter the homepage URL of this library."))
 
 (defmenu (add-local-dependency :in create-project)
   (q "Enter a name of a library. The input string is converted to a keyword.
@@ -59,4 +61,3 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
 (defmenu (create :in create-project)
   (actually-create-project)
   (quit-menu))
-

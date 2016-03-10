@@ -24,6 +24,7 @@
   :version "0.1"
   :author "<% @var author %>"
   :mailto "<% @var email %>"
+  :homepage "<% @var homepage %>"
   :license "<% @var license %>"
   :depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>)
   :components ((:module "<% @var source-dir %>"
