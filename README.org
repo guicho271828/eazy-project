@@ -11,9 +11,7 @@ Now quicklisp loadable: =(ql:quickload :eazy-project)=.
 Usage:
 #+BEGIN_SRC lisp
 ;; Add this statement in your .sbclrc / .ccl-init.lisp
-(ignore-errors   ; this is odd, but in case.
-  (ql:quickload :eazy-project)
-  (use-package :eazy-project))
+(ql:quickload :eazy-project.autoload)
 
 ;; To launch a menu, enter "!".
 ;; This is a symbol-macrolet alias to (eazy-project:launch-menu).
