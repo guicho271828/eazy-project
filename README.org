@@ -15,9 +15,14 @@ Usage:
 
 ;; To launch a menu, enter "!".
 ;; This is a symbol-macrolet alias to (eazy-project:launch-menu).
+;; symbol "!" is imported to CL-USER when eazy-project.autoload is loaded.
 !
 
-;; You can RESTORE the previous state simply by "!!" .
+;; When you do not want to import it, load eazy-project and reference to ! using a package prefix
+(ql:quickload :eazy-project)
+eazy-project:!
+
+;; You can RESTORE the previous state simply by "!!", which is also loaded to CL-USER.
 ;; See the next section to know how to save a session.
 !!
 
