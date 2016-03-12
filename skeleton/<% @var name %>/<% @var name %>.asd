@@ -23,7 +23,10 @@
 (defsystem <% @var name %>
   :version "0.1"
   :author "<% @var author %>"
-  :mailto "<% @var email %>"
+  :mailto "<% @var email %>"<% @if homepage %>
+  :homepage "<% @var homepage %>"<% @endif %><% @if bug-tracker %>
+  :bug-tracker "<% @var bug-tracker %>"<% @endif %><% @if source-control %>
+  :source-control <% (apply #'format t "(:~A \"~A\")" (getf env :source-control)) %><%  @endif %>
   :license "<% @var license %>"
   :depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>)
   :components ((:module "<% @var source-dir %>"

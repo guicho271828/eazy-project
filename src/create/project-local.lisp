@@ -27,7 +27,11 @@ subfolder, asdf system name and the package name.")
          "Enter the short description of this library. Description
 information is required for quicklisp submission, and missing this
 information annoyes Xach because he has to ask you to add that information
-each time."))
+each time.")
+  (set-x :homepage
+         "Enter the homepage URL of this library.")
+  (set-x :bug-tracker
+         "Enter URL under which a user can open bugs for this library."))
 
 (defmenu (add-local-dependency :in create-project)
   (q "Enter a name of a library. The input string is converted to a keyword.
@@ -60,3 +64,41 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
   (actually-create-project)
   (quit-menu))
 
+(defmenu (source-control :in create-project
+                         :message "Provide the source code repository.")
+  (q "Enter the the type of your versioning system together with the repository URL.
+Example:
+  git https://myhost.org/cgit/my-lib.git
+  => :source-control (:git \"https://myhost.org/cgit/my-lib.git\")
+
+If you host your library on Github or Gitlab you can use shortcuts for those services.
+Use \"github\" or \"gitlab\" as versioning system type and the URL is \"username/repository\".
+For both shortcuts the \":bug-tracker\" property will be added as well.
+Example:
+  github foo/foo
+  => :source-control (:git \"https://github.com/foo/foo.git\")
+     :bug-tracker \"https://github.com/foo/foo/issues\"
+
+The Gitlab shortcut works analogous. ")
+  (print-config-update-direction :source-control t)
+  (qif (source-control)
+       (destructuring-bind (type repo)
+           (rest (split "(.*) (.*)" source-control :with-registers-p t))
+         (match type
+           ((or "github" "gitlab")
+            (update-config-item
+             :source-control
+             (list :git
+                   (format nil "https://~A.com/~A.git" type repo))
+             t)
+            (update-config-item
+             :bug-tracker
+             (format nil "https://~A.com/~A/issues" type repo)
+             t))
+           (otherwise
+            (update-config-item
+             :source-control
+             (list (make-keyword (string-upcase type))
+                   repo)
+             t)))))
+  (up))
