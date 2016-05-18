@@ -101,7 +101,7 @@ With let and special bindings, it is unwound every time quitting the menu.")
   (iter (for child in (menu-children (symbol-menu name)))
         (collect
             (ematch (symbol-menu child)
-              ((menu- name parent (message (and message (type string))))
+              ((menu name parent (message (and message (type string))))
                `(,name (function ,name)
                        :test-function
                        (lambda (c)
@@ -110,7 +110,7 @@ With let and special bindings, it is unwound every time quitting the menu.")
                        :report-function
                        (lambda (s)
                          (princ ,message s))))
-              ((menu- name parent (message (and message (type function))))
+              ((menu name parent (message (and message (type function))))
                `(,name (function ,name)
                        :test-function
                        (lambda (c)
