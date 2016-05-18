@@ -5,7 +5,7 @@
   :mailto "guicho2.71828@gmail.com"
   :license "LLGPL"
   :depends-on (:cl-ppcre
-               :optima
+               :trivia
                :cl-emb
                :cl-syntax
                :cl-syntax-annot
