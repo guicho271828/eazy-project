@@ -1,1 +1,5 @@
-(eval (read-from-string "(every #'fiveam::TEST-PASSED-P (5am:run! :<% @var name%>))"))
+(eval
+ (read-from-string
+  "(let ((res (5am:run :<% @var name%>)))
+     (explain! res)
+     (every #'fiveam::TEST-PASSED-P res))"))
