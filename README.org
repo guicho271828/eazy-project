@@ -10,14 +10,14 @@ Now quicklisp loadable: =(ql:quickload :eazy-project)=.
 
 * Launching the menu from the shell
 
-In order to use the library from the command line you have to install it from `ros install`.
+In order to use the library from the command line you have to install it from =ros install=.
 
-```
+#+begin_src
 $ ros install eazy-project
 $ eazy-project
-```
+#+end_src
 
-Make sure `~/.roswell/bin` is in the `PATH`. otherwise replace the second line with `ros exec eazy-project`
+Make sure =~/.roswell/bin= is in the =PATH=. otherwise replace the second line with =ros exec eazy-project=
 
 * Usage on REPL
 
