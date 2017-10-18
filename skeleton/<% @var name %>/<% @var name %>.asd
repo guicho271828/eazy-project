@@ -1,18 +1,3 @@
-#|
-  This file is a part of <% @var name %> project.
-<% @if author %>  Copyright (c) <%= (local-time:timestamp-year (local-time:now)) %> <% @var author %><% @if email %> (<% @var email %>)<% @endif %>
-<% @endif %>|#
-<%
-(when (or (getf env :description)
-          (getf env :author))
-%>
-#|<% @if description %>
-  <% @var description %><% @endif %><% @if author %>
-<% (when (and (getf env :description) (getf env :author)) %>
-<% ) %>  Author: <% @var author %><% @if email %> (<% @var email %>)<% @endif %><% @endif %>
-|#
-<% ) %>
-
 <% @unless asdf3 %>
 (in-package :cl-user)
 (defpackage <% @var name %>-asd
@@ -29,8 +14,7 @@
   :source-control <% (apply #'format t "(:~A \"~A\")" (getf env :source-control)) %><%  @endif %>
   :license "<% @var license %>"
   :depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>)
-  :components ((:module "<% @var source-dir %>"
-                :components
-                ((:file "package"))))
+  :pathname "<% @var source-dir %>"
+  :components ((:file "package"))
   :description "<% @var description %>"
   :in-order-to ((test-op (test-op :<% @var test-name %>))))
