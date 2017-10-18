@@ -46,24 +46,24 @@
     (with-open-file (s *config-path*
                        :direction :output
                        :if-exists :supersede)
-
-      (prin1 (or (and (not override-default) *config*)
-                 (list :local-repository *local-repository*
-                       :skeleton-directory *skeleton-directory*
-                       :author *author*
-                       :email *email*
-                       :git t
-                       :readme-extension "md"
-                       :source-dir "src"
-                       :test-dir "t"
-                       :test-subname "test"
-                       :delimiter "."
-                       :license "LLGPL"
-                       :test :fiveam
-                       :depends-on '(:alexandria :iterate)
-                       :session.watch.max 300
-                       :session.watch.min 30))
-             s))))
+      (let ((*print-readably* t))
+        (prin1 (or (and (not override-default) *config*)
+                   (list :local-repository *local-repository*
+                         :skeleton-directory *skeleton-directory*
+                         :author *author*
+                         :email *email*
+                         :git t
+                         :readme-extension "md"
+                         :source-dir "src"
+                         :test-dir "t"
+                         :test-subname "test"
+                         :delimiter "."
+                         :license "LLGPL"
+                         :test :fiveam
+                         :depends-on '(:alexandria :iterate)
+                         :session.watch.max 300
+                         :session.watch.min 30))
+               s)))))
 
 @export
 (defun read-config ()
