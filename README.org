@@ -19,9 +19,17 @@ $ eazy-project
 
 Make sure =~/.roswell/bin= is in the =PATH=. otherwise replace the second line with =ros exec eazy-project=
 
-* Usage on REPL
+* Usage
 
-Usage:
+*On the command line*:
+
+#+begin_src 
+$ eazy-project                 # launches the main menu.
+$ eazy-project <project name>  # starts from the project creation submenu, with the project name already set.
+#+end_src
+
+*On REPL*:
+
 #+BEGIN_SRC lisp
 ;; Add this statement in your .sbclrc / .ccl-init.lisp
 (ql:quickload :eazy-project.autoload)
@@ -31,17 +39,87 @@ Usage:
 ;; symbol "!" is imported to CL-USER when eazy-project.autoload is loaded.
 !
 
-;; When you do not want to import it, load eazy-project and reference to ! using a package prefix
-(ql:quickload :eazy-project)
-eazy-project:!
-
-;; You can RESTORE the previous state simply by "!!", which is also loaded to CL-USER.
-;; See the next section to know how to save a session.
+;; "!!" restores the saved lisp state (described later).
 !!
 
+;; Otherwise load eazy-project and use !/!! with a package prefix
+(ql:quickload :eazy-project)
+eazy-project:!
 #+END_SRC
 
-Tested on SBCL-1.2.1 x64 and CCL 1.9 x64.
+** Tutorial: Creating a project using templates
+
+Assume you are creating a new project named "myproj".
+First, open the menu from a REPL or the command line.
+
+#+BEGIN_SRC 
+(You are now in menu EP-MAIN.)
+What to do next?
+
+Here are current default configs:
+:SESSION.SYSTEMS     = (...
+                        "fare-quasiquote")
+:SESSION.PACKAGE     = "COMMON-LISP-USER"
+:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
+:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
+:AUTHOR              = "Masataro Asai"
+:EMAIL               = "guicho2.71828@gmail.com"
+:GIT                 = T
+:README-EXTENSION    = "md"
+:SOURCE-DIR          = "src"
+:TEST-DIR            = "t"
+:TEST-SUBNAME        = "test"
+:DELIMITER           = "."
+:LICENSE             = "LLGPL"
+:TEST                = :FIVEAM
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [SESSION] Save/Restore the currently loaded libraries
+ 1: [CREATE-PROJECT] Create a new project.
+ 2: [SET-GLOBAL] Modify these default values
+ 3: [UP] Back to the section EP-MAIN.
+ 4: [QUIT-SESSION] Quit this session.
+ 5: [RETRY] Retry SLIME REPL evaluation request.
+#+END_SRC
+
+Noitice the several entries are already filled in, e.g.,
+=:AUTHOR = "Masataro Asai"=, =:EMAIL = "guicho2.71828@gmail.com"=.
+They can be modified later in =SET-GLOBAL= submenu. The similar interactive interface shows up.
+To select a submenu, enter the corresponding number for the restarts (0-5) or click on each menu (on Slime REPL).
+
+If you are satisfied with these global configurations, then select =CREATE-PROJECT=. A new menu shows up:
+
+#+BEGIN_SRC 
+(You are now in menu CREATE-PROJECT.)
+Select and enter the information, then select 'CREATE'.
+Current global configuration:
+....
+
+Current local configuration:
+(no configuration specified)
+   [Condition of type EAZY-PROJECT:ASK]
+
+Restarts:
+ 0: [CREATE] Create
+ 1: [RESET-LOCAL-CONFIG] Reset the current local config
+ 2: [ADD-LOCAL-DEPENDENCY] Add-Local-Dependency
+ 3: [NAME] Name
+...
+#+END_SRC
+
+In this submenu, you can further modify several /project-local/
+configurations. Those configurations are cleared each time you enter
+=CREATE-PROJECT= submenu.
+
++ Select =NAME= to enter the name of the new project, now "myproj". (if
+  you attempt to create a project without it, the generator complains and
+  opens an interactive prompt).
++ You can further add the dependencies in ADD-LOCAL-DEPENDENCY submenu.
+  + The project-local dependency is a dependency only for this project.
+
+Finally, select =CREATE=. It will set up the repository, initialize the
+repo with git (by default. It can be disabled) and load it.
 
 ** Tutorial: Restore the Yesterday's Coding Environment
 
@@ -86,90 +164,6 @@ Then, SAVE or RESTORE the current session. SAVE will store the current
 RESTORE will restore the saved session. Finally, TOGGLE-WATCH
 will initiate watching in a background thread
 which periodically check and save the session.
-
-** Tutorial: Creating a project using templates
-
-Assume you are creating a new project named "myproj".
-First, open the menu.
-It should look something like below (depending on the implementation).
-
-#+BEGIN_SRC 
-(You are now in menu EP-MAIN.)
-What to do next?
-
-Here are current default configs:
-:SESSION.SYSTEMS     = (...
-                        "fare-quasiquote")
-:SESSION.PACKAGE     = "COMMON-LISP-USER"
-:LOCAL-REPOSITORY    = #P"/mnt/video/guicho/repos/lisp/"
-:SKELETON-DIRECTORY  = #P"/mnt/video/guicho/repos/lisp/eazy-project/skeleton"
-:AUTHOR              = "Masataro Asai"
-:EMAIL               = "guicho2.71828@gmail.com"
-:GIT                 = T
-:README-EXTENSION    = "md"
-:SOURCE-DIR          = "src"
-:TEST-DIR            = "t"
-:TEST-SUBNAME        = "test"
-:DELIMITER           = "."
-:LICENSE             = "LLGPL"
-:TEST                = :FIVEAM
-   [Condition of type EAZY-PROJECT:ASK]
-
-Restarts:
- 0: [SESSION] Save/Restore the currently loaded libraries
- 1: [CREATE-PROJECT] Create a new project.
- 2: [SET-GLOBAL] Modify these default values
- 3: [UP] Back to the section EP-MAIN.
- 4: [QUIT-SESSION] Quit this session.
- 5: [RETRY] Retry SLIME REPL evaluation request.
-#+END_SRC
-
-Noitice the several entries that could be added to your new project, e.g., 
-:AUTHOR is set to "Masataro Asai", and :EMAIL is "guicho2.71828@gmail.com".
-Most of these entries are already customized for you.
-
-These default variables can be customized by proceeding to the submenu
-=EP-MAIN -> SET-GLOBAL=. The similar interactive interface would show
-up. Follow the instructions there.
-
-# + The default dependency can also be modified by editing the customization
-#   file directly. It is saved in =<eazy-project-repo>/default-config.lisp=,
-#   which is also available in =eazy-project:*config-path*=.
-
-If you are satisfied with these global configurations,
-# After adding the global dependency, say TRIVIAL-SHELL,
-then select =CREATE-PROJECT=. A new debugger menu would appear. 
-
-#+BEGIN_SRC 
-(You are now in menu CREATE-PROJECT.)
-Select and enter the information, then select 'CREATE'.
-Current global configuration:
-....
-
-Current local configuration:
-(no configuration specified)
-   [Condition of type EAZY-PROJECT:ASK]
-
-Restarts:
- 0: [CREATE] Create
- 1: [RESET-LOCAL-CONFIG] Reset the current local config
- 2: [ADD-LOCAL-DEPENDENCY] Add-Local-Dependency
- 3: [NAME] Name
-...
-#+END_SRC
-
-In this submenu, you can further modify several /project-local/
-configurations. Those configurations are cleared each time you enter
-=CREATE-PROJECT= submenu.
-
-+ Select =NAME= to enter the name of the new project, now "myproj". (if when
-  you attempt to create a project without it, the generator complains and
-  opens an interactive prompt).
-+ You can further add the dependencies in ADD-LOCAL-DEPENDENCY submenu.
-  + The project-local dependency is a dependency only for this project.
-
-Finally, select =CREATE=. It will set up the repository, initialize the
-repo with git (by default. It can be disabled) and load it.
 
 ** TODO Using Programatically
 
