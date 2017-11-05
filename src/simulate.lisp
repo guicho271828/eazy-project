@@ -5,17 +5,19 @@
   (handler-bind
       ((ask (lambda (c)
               (declare (ignorable c))
-              (destructuring-bind (menu-name . query) (pop *data*)
-                (format t "~&Current Menu: ~a" *current-menu*)
-                (format t "~&Simulating menu op: ~a" menu-name)
-                (format t "~&Available restarts: ~&~:{~30@<~s~> = ~s~%~}"
-                        (mapcar (lambda (r)
-                                  (list (restart-name r) r))
-                                (compute-restarts c)))
-                (let ((r (find-restart menu-name c)))
-                  (assert r)
-                  (format t "~&Invoking restart: ~a" r)
-                  (wrap (lambda () (apply #'invoke-restart r query))))))))
+              (when *data*
+                ;; ^^^^^ stop trying to call the restarts when the submenu selection commands are exhausted.
+                (destructuring-bind (menu-name . query) (pop *data*)
+                  (format t "~&Current Menu: ~a" *current-menu*)
+                  (format t "~&Simulating menu op: ~a" menu-name)
+                  (format t "~&Available restarts: ~&~:{~30@<~s~> = ~s~%~}"
+                          (mapcar (lambda (r)
+                                    (list (restart-name r) r))
+                                  (compute-restarts c)))
+                  (let ((r (find-restart menu-name c)))
+                    (assert r)
+                    (format t "~&Invoking restart: ~a" r)
+                    (wrap (lambda () (apply #'invoke-restart r query)))))))))
     (funcall fn)))
 
 (defun simulate-menu-selection (list)

@@ -4,8 +4,12 @@
 exec ros -Q -- $0 "$@"
 |#
 (ql:quickload :eazy-project)
-(defun main (&rest argv)
+(defun main (&optional name &rest argv)
   (declare (ignorable argv))
   #+sbcl
   (sb-ext:enable-debugger)
-  (eazy-project:launch-menu))
+  (if name
+      (eazy-project:simulate-menu-selection
+       `((eazy-project::create-project)
+         (eazy-project::name ,name)))
+      (eazy-project:launch-menu)))
