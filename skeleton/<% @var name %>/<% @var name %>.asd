@@ -13,6 +13,7 @@
   :bug-tracker "<% @var bug-tracker %>"<% @endif %><% @if source-control %>
   :source-control <% (apply #'format t "(:~A \"~A\")" (getf env :source-control)) %><%  @endif %>
   :license "<% @var license %>"
+  :defsystem-depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :defsystem-depends-on)) %>)
   :depends-on (<% (format t "~{:~(~A~)~^ ~}" (getf env :depends-on)) %>)
   :pathname "<% @var source-dir %>"
   :components ((:file "package"))

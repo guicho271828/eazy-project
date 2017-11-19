@@ -47,6 +47,20 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
         t))
   (up))
 
+(defmenu (add-local-defsystem-dependency :in create-project)
+  (q "Enter a name of a library. The input string is converted to a keyword.
+Example:   cFfI   -->  finally appears as :CFFI")
+  (print-config-update-direction :defsystem-depends-on t)
+  (qif (str)
+       (update-config-item
+        :defsystem-depends-on
+        (union
+         (list (intern (string-upcase str)
+                       (find-package "KEYWORD")))
+         (l :defsystem-depends-on))
+        t))
+  (up))
+
 (defmenu (reset-local-config
           :in create-project
           :message "Reset the current local config")

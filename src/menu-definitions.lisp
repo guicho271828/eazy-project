@@ -19,14 +19,16 @@
 ;;; utilities
 
 (defmacro qif ((var) then &optional (else '(q "~%Cancelled.~%")))
-  "Read a line from *query-io*, bind it to var, then if it is non-empty string run `then'.
-else, run `else'."
+  "Read a line from *query-io*, bind it to var, then if it is a non-empty string run `then'.
+Else, run `else'."
   `(let ((,var (or (pop *menu-arguments*) ;; when called programatically
                    (read-line *query-io*))))
      (if (plusp (length ,var))
          ,then
          ,else)))
 (defun q (format-control &rest format-arguments)
+  "Shortcut for (format *query-io* format-control format-arguments...) .
+Newline is always inserted in the beginning."
   (terpri *query-io*)
   (apply #'format *query-io* format-control
          format-arguments))
@@ -58,5 +60,6 @@ else, run `else'."
       (save-config))))
 
 (defun print-config-update-direction (what &optional local)
+  "Print the current value, then print the direction for how to enter/cancel the input."
   (q "~%~20@<Current:~> ~A~%~20@<Empty Line:~> cancel~%> "
      (getf (if local *project-config* *config*) what "")))

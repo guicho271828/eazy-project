@@ -52,10 +52,27 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
          (g :depends-on))))
   (up))
 
+(defmenu (add-defsystem-dependency :in set-global)
+  (q "Enter a name of a library. The input string is converted to a keyword.
+Example:   oSiCaT   -->  finally appears as :OSICAT")
+  (print-config-update-direction :defsystem-depends-on)
+  (qif (str)
+       (update-config-item
+        :defsystem-depends-on
+        (union
+         (list (intern (string-upcase str)
+                       (find-package "KEYWORD")))
+         (g :defsystem-depends-on))))
+  (up))
+
+
 (defmenu (clear-dependency :in set-global :message "Clear the default dependency")
   (update-config-item :depends-on nil)
   (up))
 
+(defmenu (clear-defsystem-dependency :in set-global :message "Clear the default dependency")
+  (update-config-item :defsystem-depends-on nil)
+  (up))
 
 (defmenu (testing-library :in set-global :message "Change the default testing library")
   (q "Enter a name of the test library you'd like to use.
