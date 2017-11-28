@@ -1,3 +1,1 @@
-(eval
- (read-from-string
-  "(5am:run! :<% @var name%>)"))
+(eval (read-from-string "(5am:run! :<% @var name%>)"))
