@@ -1,7 +1,7 @@
 #!/bin/sh
 #|-*- mode:lisp -*-|#
 #|
-exec ros -Q -- $0 "$@"
+exec ros -L sbcl-bin -m eazy-project -Q -- $0 "$@"
 |#
 (ql:quickload :eazy-project)
 (defun main (&optional name &rest argv)
