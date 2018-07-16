@@ -20,6 +20,7 @@ $ update-asdf
 |#
 <% ) %>
 
-((:package)
- (:rest))
+((:dir :src
+       (:package)
+       (:rest)))
 
