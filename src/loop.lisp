@@ -21,13 +21,14 @@
   "launch the menu."
   (unwind-protect
        (restart-case
-           (invoke-menu 'ep-main)
-         (:quit-menu ()
+           (handler-bind ((ask #'render-menu))
+             (invoke-menu 'ep-main))
+         (quit-menu ()
            :report "Quit this eazy-project menu."))
     (setf *package* *future-package*)))
 
 
 @export
 (defun quit-menu ()
-  (invoke-restart (find-restart :quit-menu)))
+  (invoke-restart (find-restart 'quit-menu)))
 

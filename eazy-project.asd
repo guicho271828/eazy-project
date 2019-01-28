@@ -22,6 +22,7 @@
                  (:file :defmenu)
                  (:file :ask)
                  (:file :loop)
+                 (:file :render)
                  (:file :menu-definitions)
                  (:file :simulate)
                  (:file :global)
