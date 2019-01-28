@@ -18,6 +18,9 @@
                   (reduce #'max (mapcar (compose #'princ-to-string #'restart-name) rs) :key #'length)
                   (restart-name r)
                   r))
+    (ematch c
+      ((simple-condition format-control format-arguments)
+       (apply #'format *debug-io* format-control format-arguments)))
     (block nil
       (tagbody
        :start
