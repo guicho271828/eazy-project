@@ -5,7 +5,5 @@
         :iterate
         :cl-ppcre
         :cl-emb
-        :trivia)
-  (:export
-   #:simulate-menu-selection))
+        :trivia))
 
