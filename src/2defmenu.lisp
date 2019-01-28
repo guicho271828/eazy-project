@@ -71,7 +71,7 @@ With let and special bindings, it is unwound every time quitting the menu.")
 @export
 (defun up ()
   "go up the menu"
-  (invoke-restart (find-restart :up)))
+  (invoke-restart (find-restart 'up)))
 
 (defun menu-task (menu)
   (compile nil `(lambda () ,(menu-task-form menu))))
@@ -88,7 +88,7 @@ With let and special bindings, it is unwound every time quitting the menu.")
               
               (let ((*current-menu* ',name))
                 ,@(menu-body menu)))
-          (:up ()
+          (up ()
             :report ,(format nil "Back to the section ~a." name)
             :test (lambda (c)
                     (declare (ignore c))

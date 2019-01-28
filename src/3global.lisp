@@ -29,7 +29,7 @@ Current configuration:
     ))
 
 (macrolet ((set-x (what &optional control)
-             `(defmenu (,what :in set-global)
+             `(defmenu (,(intern (symbol-name what) :eazy-project) :in set-global)
                 ,(if control
                      `(q ,control)
                      `(q "Enter the ~a information." ,what))
