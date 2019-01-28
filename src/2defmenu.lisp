@@ -7,19 +7,20 @@
 (defvar *parent-children-db* (make-hash-table :test 'eq))
 (defun menu-children (menu)
   (copy-list (gethash (menu-name menu) *parent-children-db*)))
-(defstruct menu
-  (name nil
-        :type symbol
-        :read-only t)
-  (parent (error "parent not specified")
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defstruct menu
+    (name nil
           :type symbol
           :read-only t)
-  (message ""
-         :type (or string function)
-         :read-only t)
-  (body (error "body not specified")
-        :type list
-        :read-only t))
+    (parent (error "parent not specified")
+            :type symbol
+            :read-only t)
+    (message ""
+             :type (or string function)
+             :read-only t)
+    (body (error "body not specified")
+          :type list
+          :read-only t)))
 
 (lispn:define-namespace menu t)
 
