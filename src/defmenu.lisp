@@ -28,12 +28,16 @@
   "Holds the arguments to the restarts, when the menu is launched
   programatically. These arguments are considered by `qif'.")
 
+(defun fname (name)
+  (intern (concatenate 'string "%" (symbol-name name))
+          (symbol-package name)))
+
 @export
 (defmacro defmenu ((name &key
                          (message (string-capitalize name))
                          (in name parent-provided-p)) &body body)
   (assert (symbolp name))
-  (let ((fname (symbolicate '% name)))
+  (let ((fname (fname name)))
     `(block defmenu
        ;; invalidation
        (when (menu-boundp ',name)
@@ -103,7 +107,7 @@ With let and special bindings, it is unwound every time quitting the menu.")
         (collect
             (ematch (symbol-menu child)
               ((menu name parent (message (and message (type string))))
-               (let ((fname (symbolicate '% name)))
+               (let ((fname (fname name)))
                  `(,name (function ,fname)
                          :test-function
                          (lambda (c)
@@ -113,7 +117,7 @@ With let and special bindings, it is unwound every time quitting the menu.")
                          (lambda (s)
                            (princ ,message s)))))
               ((menu name parent (message (and message (type function))))
-               (let ((fname (symbolicate '% name)))
+               (let ((fname (fname name)))
                  `(,name (function ,fname)
                          :test-function
                          (lambda (c)
