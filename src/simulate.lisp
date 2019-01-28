@@ -1,5 +1,7 @@
 (in-package :eazy-project)
 
+(cl-syntax:use-syntax :annot)
+
 (defvar *data* nil)
 (defun wrap (fn &optional (*data* *data*))
   (handler-bind
@@ -29,3 +31,8 @@ ARGS are passed to the restart through, basically,
 
 This API is not carefully considered and not for public usage. "
   (wrap (lambda () (launch-menu)) list))
+
+@export
+(define-symbol-macro !!
+    (simulate-menu-selection
+     '((restore))))
