@@ -6,16 +6,6 @@
 (defvar *project-config* nil
   "stores project-local information.")
 
-;;; main menu
-
-(defmenu (ep-main)
-  (format t "~@[Resetting the current project config~%~]"
-          *project-config*)
-  (setf *project-config* nil)
-  (ask "What to do next?~2%Here are current default configs:
-~{~20@<~s~> = ~s~%~}"
-       *config*))
-
 ;;; utilities
 
 (defmacro qif ((var) then &optional (else '(q "~%Cancelled.~%")))

@@ -1,6 +1,16 @@
 (in-package :eazy-project)
 
-;;;; global configurations
+;;; main menu
+
+(defmenu (ep-main)
+  (format t "~@[Resetting the current project config~%~]"
+          *project-config*)
+  (setf *project-config* nil)
+  (ask "What to do next?~2%Here are current default configs:
+~{~20@<~s~> = ~s~%~}"
+       *config*))
+
+;;; global configurations
 
 ;; values should be stored through update-config-item,
 ;; which also handles saving the database.

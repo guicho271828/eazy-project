@@ -17,16 +17,14 @@
   :serial t
   :components ((:module "src"
                 :components
-                ((:file :package)
-                 (:file :util)
-                 (:file :specials)
-                 (:file :defmenu)
-                 (:file :ask)
-                 (:file :loop)
-                 (:file :render)
-                 (:file :menu-definitions)
-                 (:file :simulate)
-                 (:file :global)
+                ((:file :0package)
+                 (:file :1util)
+                 (:file :1ask)
+                 (:file :2specials)
+                 (:file :2defmenu)
+                 (:file :2menu-definition-tools)
+                 (:file :3global)
+                 (:file :4loop)
                  (:module "create"
                           :components
                           ((:file :project-local)
