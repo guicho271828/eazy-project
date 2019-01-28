@@ -66,11 +66,12 @@ With let and special bindings, it is unwound every time quitting the menu.")
   (setf *future-package* *package*)
   (funcall (menu-task (etypecase menu
                         (symbol (symbol-menu menu))
-                        (menu menu))))
+                        (menu menu)))))
 
-  ;; (when-let ((r (find-restart 'up)))
-  ;;   (invoke-restart r))
-  )
+@export
+(defun up ()
+  "go up the menu"
+  (invoke-restart (find-restart :up)))
 
 (defun menu-task (menu)
   (compile nil `(lambda () ,(menu-task-form menu))))
@@ -96,11 +97,6 @@ With let and special bindings, it is unwound every time quitting the menu.")
                               (symbol-menu *current-menu*))
                              ',name)))
             (go :start))))))
-
-@export
-(defun up ()
-  "go up the menu"
-  (invoke-restart (find-restart :up)))
 
 (defun generate-restart-hander-forms (name)
   (iter (for child in (menu-children (symbol-menu name)))
