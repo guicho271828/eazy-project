@@ -59,6 +59,7 @@
 
   (signals ask (launch-menu))
   (finishes
-   (handler-bind ((ask (lambda (c) (quit-menu))))
-     (launch-menu))))
+    (handler-bind ((ask (lambda (c) (quit-menu))))
+      ;; overrides the default handler in launch-menu
+      (launch-menu))))
 

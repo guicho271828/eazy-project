@@ -2,6 +2,9 @@
 
 (cl-syntax:use-syntax :annot)
 
+(defun shell-command (command)
+  (uiop:run-program `("sh" "-c" ,command) :ignore-error-status t :output :string))
+
 (defvar *skeleton-directory*
   #.(asdf:system-relative-pathname
      :eazy-project

@@ -2,14 +2,10 @@
 (in-package :eazy-project)
 
 
-(defmenu (session
-          :in ep-main
-          :message "Save/Restore the currently loaded libraries")
+(defmenu (session :in ep-main :message "Save/Restore the currently loaded libraries")
   (ask "What to do next?"))
 
-(defmenu (restore
-          :in ep-main
-          :message "Restore the past loaded session")
+(defmenu (restore :in ep-main :message "Restore the past loaded session")
   (format t "~&[Restoring the session....]~%")
   (try-initiate-watch)
   (mapc #'asdf:load-system (g :session.systems))
@@ -20,8 +16,7 @@
       (format t "~&[No saved session found. To save a session, go EP-MENU > SESSION > SAVE]~2%"))
   (quit-menu))
 
-(defmenu (save :in session
-               :message "Save the current loaded session")
+(defmenu (save :in session :message "Save the current loaded session")
   (save-session)
   (quit-menu))
 
@@ -59,6 +54,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
                        (find-package "KEYWORD")))
          (g :session.systems))))
   (up))
+
 (defmenu (reset-default-system :in session)
   (print-config-update-direction :session.systems)
   (qif (str)
@@ -66,9 +62,7 @@ Example:   oSiCaT   -->  finally appears as :OSICAT")
   (up))
 
 (defvar *main-thread*)
-(defmenu (toggle-watch
-          :in session
-          :message "Watch and automatically save the session")
+(defmenu (toggle-watch :in session :message "Watch and automatically save the session")
   (toggle-global :session.watch)
   (update-config-item :session.watch.min
                       (or (g :session.watch.min) 30))

@@ -1,14 +1,22 @@
 (in-package :eazy-project)
 
-;;;; global configurations
+;;; main menu
+
+(defmenu (ep-main)
+  (format t "~@[Resetting the current project config~%~]"
+          *project-config*)
+  (setf *project-config* nil)
+  (ask "What to do next?~2%Here are current default configs:
+~{~20@<~s~> = ~s~%~}"
+       *config*))
+
+;;; global configurations
 
 ;; values should be stored through update-config-item,
 ;; which also handles saving the database.
 
 (defvar *recent-change* nil)
-(defmenu (set-global
-          :in ep-main
-          :message "Modify these default values")
+(defmenu (set-global :in ep-main :message "Modify these default values")
   (let ((lextmp *recent-change*))
     (setf *recent-change* nil)
     (ask "~@[*** ~a Configuration Updated!! ***~%~]
@@ -21,7 +29,7 @@ Current configuration:
     ))
 
 (macrolet ((set-x (what &optional control)
-             `(defmenu (,what :in set-global)
+             `(defmenu (,(intern (symbol-name what) :eazy-project) :in set-global)
                 ,(if control
                      `(q ,control)
                      `(q "Enter the ~a information." ,what))

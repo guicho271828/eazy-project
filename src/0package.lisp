@@ -5,7 +5,5 @@
         :iterate
         :cl-ppcre
         :cl-emb
-        :optima)
-  (:export
-   #:simulate-menu-selection))
+        :trivia))
 

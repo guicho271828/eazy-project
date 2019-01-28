@@ -159,14 +159,14 @@ Actual Parameters:
       (assert l nil "the project name is not provided!")
     (error (c)
       (declare (ignore c))
-      (name))))
+      (%name))))
 
 (defprocessor (:description g l)
   (handler-case
       (assert l nil "the description is not provided! It annoys Zach on quicklisp submission!")
     (error (c)
       (declare (ignore c))
-      (description))))
+      (%description))))
 
 ;; appended to global settings
 (defprocessor (:depends-on g l) (setf l (union l g)))

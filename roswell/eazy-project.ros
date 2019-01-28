@@ -12,4 +12,4 @@ exec ros -L sbcl-bin -m eazy-project -Q -- $0 "$@"
       (eazy-project:simulate-menu-selection
        `((eazy-project::create-project)
          (eazy-project::name ,name)))
-      (eazy-project:launch-menu)))
+      (eazy-project:launch-menu-interactively)))
