@@ -33,24 +33,25 @@
                          (message (string-capitalize name))
                          (in name parent-provided-p)) &body body)
   (assert (symbolp name))
-  `(block defmenu
-     ;; invalidation
-     (when (menu-boundp ',name)
-       (let ((old (symbol-menu ',name)))
-         (warn "Redefining menu: ~a" ',name)
-         (let ((old-parent (menu-parent old)))
-           (removef (gethash old-parent *parent-children-db*) ',name))))
-     (defun ,name (&rest *menu-arguments*)
-       (invoke-menu (symbol-menu ',name)))
-     (let* ((menuobj
-             (make-menu :name ',name
-                        :parent ',in
-                        :message ,message
-                        :body ',body)))
-       (setf (symbol-menu ',name) menuobj)
-       ,(when parent-provided-p
-              `(pushnew ',name (gethash ',in *parent-children-db*)))
-       ',name)))
+  (let ((fname (symbolicate '% name)))
+    `(block defmenu
+       ;; invalidation
+       (when (menu-boundp ',name)
+         (let ((old (symbol-menu ',name)))
+           (warn "Redefining menu: ~a" ',name)
+           (let ((old-parent (menu-parent old)))
+             (removef (gethash old-parent *parent-children-db*) ',name))))
+       (defun ,fname (&rest *menu-arguments*)
+         (invoke-menu (symbol-menu ',name)))
+       (let* ((menuobj
+               (make-menu :name ',name
+                          :parent ',in
+                          :message ,message
+                          :body ',body)))
+         (setf (symbol-menu ',name) menuobj)
+         ,(when parent-provided-p
+            `(pushnew ',name (gethash ',in *parent-children-db*)))
+         ',name))))
 
 (defvar *future-package* nil
   "FIXME: A hack to set the correct package with restore-session.
@@ -101,21 +102,23 @@ With let and special bindings, it is unwound every time quitting the menu.")
   (iter (for child in (menu-children (symbol-menu name)))
         (collect
             (ematch (symbol-menu child)
-              ((menu- name parent (message (and message (type string))))
-               `(,name (function ,name)
-                       :test-function
-                       (lambda (c)
-                         (and (askp c)
-                              (eq *current-menu* ',parent)))
-                       :report-function
-                       (lambda (s)
-                         (princ ,message s))))
-              ((menu- name parent (message (and message (type function))))
-               `(,name (function ,name)
-                       :test-function
-                       (lambda (c)
-                         (and (askp c)
-                              (eq *current-menu* ',parent)))
-                       :report-function
-                       (lambda (s)
-                         (funcall ,message s))))))))
+              ((menu name parent (message (and message (type string))))
+               (let ((fname (symbolicate '% name)))
+                 `(,name (function ,fname)
+                         :test-function
+                         (lambda (c)
+                           (and (askp c)
+                                (eq *current-menu* ',parent)))
+                         :report-function
+                         (lambda (s)
+                           (princ ,message s)))))
+              ((menu name parent (message (and message (type function))))
+               (let ((fname (symbolicate '% name)))
+                 `(,name (function ,fname)
+                         :test-function
+                         (lambda (c)
+                           (and (askp c)
+                                (eq *current-menu* ',parent)))
+                         :report-function
+                         (lambda (s)
+                           (funcall ,message s)))))))))
