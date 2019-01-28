@@ -16,9 +16,7 @@
 ;; which also handles saving the database.
 
 (defvar *recent-change* nil)
-(defmenu (set-global
-          :in ep-main
-          :message "Modify these default values")
+(defmenu (set-global :in ep-main :message "Modify these default values")
   (let ((lextmp *recent-change*))
     (setf *recent-change* nil)
     (ask "~@[*** ~a Configuration Updated!! ***~%~]
