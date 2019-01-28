@@ -14,6 +14,7 @@
                :introspect-environment
                :bordeaux-threads
                :lisp-namespace)
+  :serial t
   :components ((:module "src"
                 :components
                 ((:file :package)
