@@ -18,9 +18,8 @@
   :components ((:module "src"
                 :components
                 ((:file :0package)
-                 (:file :1util)
+                 (:file :1specials)
                  (:file :1ask)
-                 (:file :2specials)
                  (:file :2defmenu)
                  (:file :2menu-definition-tools)
                  (:file :3global)
