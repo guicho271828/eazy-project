@@ -1,10 +1,3 @@
-<% @unless asdf3 %>
-(in-package :cl-user)
-(defpackage <% @var name %>-asd
-  (:use :cl :asdf))
-(in-package :<% @var name %>-asd)
-<% @endunless %>
-
 (defsystem <% @var name %>
   :version "0.1"
   :author "<% @var author %>"
